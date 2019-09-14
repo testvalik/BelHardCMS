@@ -1,7 +1,7 @@
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
+
 UserModel = get_user_model()
-from re import findall
 
 
 class Sex(models.Model):
@@ -25,7 +25,7 @@ class City(models.Model):
 
 
 class Certificate(models.Model):
-    img = models.ImageField()##########################???
+    img = models.ImageField()  ##########################???
     link = models.URLField(max_length=100)
 
 
@@ -44,11 +44,11 @@ class Education(models.Model):
 
 
 class Skills_word(models.Model):
-    skills_word = models.CharField(max_length=100)########????
+    skills_word = models.CharField(max_length=100)  ########????
 
 
 class Skills(models.Model):
-    skills = models.CharField(max_length=100)###?????????
+    skills = models.CharField(max_length=100)  ###?????????
 
 
 class Sphere(models.Model):
@@ -57,7 +57,7 @@ class Sphere(models.Model):
 
 class Experience(models.Model):
     name = models.CharField(max_length=100)
-    sphere = models.ManyToManyField(Sphere)###### not more 3
+    sphere = models.ManyToManyField(Sphere)  ###### not more 3
     position = models.CharField(max_length=100)
     start_date = models.DateField()
     end_date = models.DateField()
@@ -65,7 +65,7 @@ class Experience(models.Model):
 
 
 class CV_word(models.Model):
-    position_word = models.CharField(max_length=100)##???
+    position_word = models.CharField(max_length=100)  ##???
 
 
 class Employment(models.Model):
@@ -81,7 +81,7 @@ class Type_salary(models.Model):
 
 
 class CV(models.Model):
-    position = models.CharField(max_length=100)####????
+    position = models.CharField(max_length=100)  ####????
     employment = models.ForeignKey(Employment, on_delete=models.SET_NULL, null=True)
     time_job = models.ForeignKey(Time_job, on_delete=models.SET_NULL, null=True)
     salary = models.CharField(max_length=10, null=True)
@@ -100,7 +100,8 @@ class Client(models.Model):
 
     sex = models.ForeignKey(Sex, on_delete=models.SET_NULL, null=True, blank=True)
     date_born = models.DateField(null=True, blank=True)
-    citizenship = models.ForeignKey(Citizenship, related_name='citizenship', on_delete=models.SET_NULL, null=True, blank=True)
+    citizenship = models.ForeignKey(Citizenship, related_name='citizenship', on_delete=models.SET_NULL, null=True,
+                                    blank=True)
     family_state = models.ForeignKey(Family_state, on_delete=models.SET_NULL, null=True, blank=True)
     children = models.ForeignKey(Children, on_delete=models.SET_NULL, null=True, blank=True)
     country = models.ForeignKey(Citizenship, related_name='country', on_delete=models.SET_NULL, blank=True, null=True)
@@ -109,21 +110,21 @@ class Client(models.Model):
     house = models.CharField(max_length=100, verbose_name='Номер дома', null=True, blank=True)
     flat = models.CharField(max_length=10, verbose_name='Квартира', null=True, blank=True)
     telegram_link = models.CharField(max_length=100, blank=True, null=True,
-                                     verbose_name='Ник в телеграмме')#при верстке учесть @
+                                     verbose_name='Ник в телеграмме')  # при верстке учесть @
     email = models.EmailField(max_length=200, null=True, blank=True)
     link_linkedin = models.URLField(max_length=200, null=True, blank=True)
     skype = models.CharField(max_length=100, null=True, blank=True)
-    #education fields
+    # education fields
     education = models.ForeignKey(Education, on_delete=models.SET_NULL, null=True, blank=True)
-    #skills
+    # skills
     skills = models.ForeignKey(Skills, on_delete=models.SET_NULL, null=True, blank=True)
-    #exp
+    # exp
     organization = models.ForeignKey(Experience, on_delete=models.SET_NULL, null=True, blank=True)
-    #rez
+    # rez
     cv = models.ForeignKey(CV, on_delete=models.SET_NULL, null=True, blank=True)
-    #img
+    # img
     img = models.ImageField(blank=True, null=True)
-    #state
+    # state
     state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True)
 
 
@@ -134,5 +135,3 @@ class Telephone(models.Model):
     def save(self, *args, **kwargs):
         # do something
         super().save(*args, **kwargs)
-
-
