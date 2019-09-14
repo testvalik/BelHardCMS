@@ -5,6 +5,8 @@ UserModel = get_user_model()
 
 print("hello asdasdasdasdasdasdas")
 
+print("Hello from Valik")
+
 class Sex(models.Model):
     sex_word = models.CharField(max_length=10)
 
