@@ -3,6 +3,7 @@ from django.db import models
 
 UserModel = get_user_model()
 
+print("hello asdasdasdasdasdasdas")
 
 class Sex(models.Model):
     sex_word = models.CharField(max_length=10)
