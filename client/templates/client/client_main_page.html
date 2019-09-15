@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    {% load staticfiles %}
+    <title>{% block title %}Client{% endblock %} - HR-System</title>
+</head>
+<body style="font-size: large">
+
+<div class="p-sm-3 pt-sm-5">
+    <nav class="nav fixed-top" style="background-color: #344955">
+        <a class="nav-link text-white" href="/">HR-System</a>
+        <a class="nav-link text-white" href="#">Задачи</a>
+        <a class="nav-link text-white" href="#">Предложение</a>
+        <a class="nav-link text-white" href="#">Собеседования</a>
+        <a class="nav-link text-white" href="#">Связаться с КЦ</a>
+        <a class="nav-link text-white" href="/client/profile">
+{#            <img src="{% static 'client/img/user_1.png' %}">#}
+            <img src="{% static client %}" alt="img" class="m-sm-1" height="64">
+            Клиент
+        </a>
+    </nav>
+</div>
+
+<div class="p-sm-3 pt-sm-5">
+    <section class="content">
+        {% block content %}{% endblock %}
+    </section>
+</div>
+
+</body>
+</html>

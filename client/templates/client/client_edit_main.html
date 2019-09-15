@@ -1,0 +1,53 @@
+{% extends 'client/client_main_page.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Edit Profile
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+
+        <div class="col-md-8">
+            <h3>Общая информация</h3>
+            <p>....</p>
+
+            <h3>Адрес проживания</h3>
+            <p>....</p>
+
+            <h3>Контакты</h3>
+            <p>....</p>
+        </div>
+
+        <div class="col-md-4">
+            <div class="list-group">
+                <a href="#" id="data_temp"
+                   class="list-group-item list-group-item-action list-group-item-primary">
+                    Образование +</a>
+                <a href="#" id="data_hum"
+                   class="list-group-item list-group-item-action list-group-item-secondary">
+                    Навыки +</a>
+                <a href="#" id="data_pres"
+                   class="list-group-item list-group-item-action list-group-item-warning">
+                    Опыт работы +</a>
+                <a href="#"
+                   class="list-group-item list-group-item-action list-group-item-info">
+                    Резюме +</a>
+                <a href="#"
+                   class="list-group-item list-group-item-action list-group-item-danger">
+                    Фото +</a>
+
+                <p>статус</p>
+            </div>
+        </div>
+
+        <!-- # TODO: есть ли лучший метод обработки POST ? -->
+        <form action="/client/save_edit_main" method="post">
+            {% csrf_token %}
+            <input type="submit" value="ok" formmethod="post" class="btn btn-outline-success">
+        </form>
+
+    </div>
+
+{% endblock %}
