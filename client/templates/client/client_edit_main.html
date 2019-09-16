@@ -10,44 +10,49 @@
     <div class="row">
 
         <div class="col-md-8">
-            <h3>Общая информация</h3>
-            <p>....</p>
 
-            <h3>Адрес проживания</h3>
-            <p>....</p>
+            <!-- # TODO: есть ли лучший метод обработки POST ? -->
+            <form action="/client/save_edit_main" method="post">
+                {% csrf_token %}
 
-            <h3>Контакты</h3>
-            <p>....</p>
+                <div>
+                    <h3>Общая информация</h3>
+                    <p>....</p>
+
+                    <h3>Адрес проживания</h3>
+                    <p>....</p>
+
+                    <h3>Контакты</h3>
+                    <p>....</p>
+
+                    <p>статус</p>
+
+                </div>
+
+                <input type="submit" value="Сохранить" formmethod="post" class="btn btn-outline-success">
+
+            </form>
         </div>
 
         <div class="col-md-4">
             <div class="list-group">
-                <a href="#" id="data_temp"
+                <a href="#" id="edit_education"
                    class="list-group-item list-group-item-action list-group-item-primary">
                     Образование +</a>
-                <a href="#" id="data_hum"
+                <a href="/client/edit/skills" id="edit_skills"
                    class="list-group-item list-group-item-action list-group-item-secondary">
                     Навыки +</a>
-                <a href="#" id="data_pres"
+                <a href="#" id="edit_experience"
                    class="list-group-item list-group-item-action list-group-item-warning">
                     Опыт работы +</a>
-                <a href="#"
+                <a href="#" id="edit_cv"
                    class="list-group-item list-group-item-action list-group-item-info">
                     Резюме +</a>
-                <a href="#"
+                <a href="#" id="edit_foto"
                    class="list-group-item list-group-item-action list-group-item-danger">
                     Фото +</a>
-
-                <p>статус</p>
             </div>
         </div>
-
-        <!-- # TODO: есть ли лучший метод обработки POST ? -->
-        <form action="/client/save_edit_main" method="post">
-            {% csrf_token %}
-            <input type="submit" value="ok" formmethod="post" class="btn btn-outline-success">
-        </form>
-
     </div>
 
 {% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'client/client_main_page.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Edit Skills
+{% endblock %}
+
+{% block content %}
+
+    <h3>skills</h3>
+
+    <div class="row">
+        <div class="col-md-4">
+
+            <form action="/client/save_edit_skills" method="post">
+                {% csrf_token %}
+
+                <div class="list-group">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Enter your skill"
+                               aria-label="Enter your skill" aria-describedby="button-addon2" id="city"
+                               value="" name="skill_1">
+                        {#                value="{{ request.form['skill'] }}#}
+                    </div>
+
+                    <a href="#" id="skill_plus"
+                       class="list-group-item list-group-item-action list-group-item-primary mb-3">
+                        Навык +</a>
+                </div>
+
+                <input type="submit" value="Сохранить данные" formmethod="post" class="btn btn-outline-success mb-3">
+            </form>
+
+        </div>
+    </div>
+
+{% endblock %}
