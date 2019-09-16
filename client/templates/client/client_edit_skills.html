@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-md-4">
 
-            <form action="/client/save_edit_skills" method="post">
+            <form action="{% url 'client_save_edit_skills' %}" method="post">
                 {% csrf_token %}
 
                 <div class="list-group">

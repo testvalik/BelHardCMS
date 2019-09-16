@@ -10,13 +10,13 @@
     <div>
         <h3>Hello Client Profile</h3>
         <p>
-            <a href="/client/edit" class="btn btn-outline-primary">Редактировать</a>
+            <a href="{% url 'client_edit' %}" class="btn btn-outline-primary">Редактировать</a>
 
             <img src="{% static client_img %}" alt="img" class="m-sm-1" height="64">
 
             text....
 
-            <a href="/client" class="btn btn-outline-danger">X</a>
+            <a href="{% url 'client' %}" class="btn btn-outline-danger">X</a>
         </p>
 
     </div>

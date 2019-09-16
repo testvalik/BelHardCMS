@@ -21,7 +21,7 @@ class Children(models.Model):
 
 
 class City(models.Model):
-    City_word = models.CharField(max_length=100)
+    city_word = models.CharField(max_length=100)
 
 
 class Certificate(models.Model):
@@ -100,8 +100,8 @@ class Client(models.Model):
 
     sex = models.ForeignKey(Sex, on_delete=models.SET_NULL, null=True, blank=True)
     date_born = models.DateField(null=True, blank=True)
-    citizenship = models.ForeignKey(Citizenship, related_name='citizenship', on_delete=models.SET_NULL, null=True,
-                                    blank=True)
+    citizenship = models.ForeignKey(Citizenship, related_name='citizenship', on_delete=models.SET_NULL,
+                                    null=True, blank=True)
     family_state = models.ForeignKey(Family_state, on_delete=models.SET_NULL, null=True, blank=True)
     children = models.ForeignKey(Children, on_delete=models.SET_NULL, null=True, blank=True)
     country = models.ForeignKey(Citizenship, related_name='country', on_delete=models.SET_NULL, blank=True, null=True)
@@ -109,11 +109,13 @@ class Client(models.Model):
     street = models.CharField(max_length=100, verbose_name='Улица', null=True, blank=True)
     house = models.CharField(max_length=100, verbose_name='Номер дома', null=True, blank=True)
     flat = models.CharField(max_length=10, verbose_name='Квартира', null=True, blank=True)
+
     telegram_link = models.CharField(max_length=100, blank=True, null=True,
                                      verbose_name='Ник в телеграмме')  # при верстке учесть @
     email = models.EmailField(max_length=200, null=True, blank=True)
     link_linkedin = models.URLField(max_length=200, null=True, blank=True)
     skype = models.CharField(max_length=100, null=True, blank=True)
+
     # education fields
     education = models.ForeignKey(Education, on_delete=models.SET_NULL, null=True, blank=True)
     # skills
@@ -124,6 +126,7 @@ class Client(models.Model):
     cv = models.ForeignKey(CV, on_delete=models.SET_NULL, null=True, blank=True)
     # img
     img = models.ImageField(blank=True, null=True)
+
     # state
     state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True)
 
