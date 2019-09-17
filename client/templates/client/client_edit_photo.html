@@ -1,0 +1,27 @@
+{% extends 'client/client_main_page.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Edit Photo
+{% endblock %}
+
+{% block content %}
+
+    <h3>Your Photo</h3>
+
+    {# TODO: нужен полный путь к картинке для загрузки и сохранения в БД #}
+    <form action="{% url 'client_save_edit_photo' %}">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="inputGroupFile02" name="photo">
+                <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">
+                    Choose file</label>
+            </div>
+            <div class="input-group-append">
+                <input type="submit" value="Сохранить" formmethod="post" class="btn btn-outline-success">
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

@@ -45,19 +45,26 @@
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="id_sex">Пол:</label>
                     </div>
+
                     <select class="custom-select" id="id_sex" name="sex">
                         <option selected>Choose...</option>
                         <option value="M">М</option>
                         <option value="F">Ж</option>
+                        <!-- testing Sex model -->
+                        {% for s in sex %}
+                            <option value="{{ s.sex_word }}">{{ s.sex_word }}</option>
+                        {% endfor %}
+                        <!-- testing Sex model-->
                     </select>
                 </div>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="id_date_born">Дата рождения:</label>
                     </div>
-                    <select class="custom-select" id="id_date_born" name="date_born">
-                        <option selected>Choose...</option>
-                    </select>
+                    {#                    <select class="custom-select" id="id_date_born" name="date_born">#}
+                    {#                        <option selected>Choose...</option>#}
+                    {#                    </select>#}
+                    <input type="date" name="date_born" aria-label="DateBorn" id="id_date_born">
                 </div>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
@@ -145,7 +152,8 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">Телефон:</span>
                     </div>
-                    <input type="text" aria-label="Phone" class="form-control" name="phone">
+                    <!-- pattern="[0-9]{3}[0-9]{3}[0-9]{3}" -->
+                    <input type="tel" aria-label="Phone" class="form-control" name="phone">
                 </div>
 
                 <div class="input-group mb-3">
@@ -166,14 +174,14 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">E-mail:</span>
                     </div>
-                    <input type="text" aria-label="E-mail" class="form-control" name="email">
+                    <input type="email" aria-label="E-mail" class="form-control" name="email">
                 </div>
 
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text">Linkedin:</span>
                     </div>
-                    <input type="text" aria-label="Linkedin" class="form-control" name="link_linkedin">
+                    <input type="url" aria-label="Linkedin" class="form-control" name="link_linkedin">
                 </div>
 
                 <hr>
@@ -211,7 +219,7 @@
                 <a href="#" id="edit_cv"
                    class="list-group-item list-group-item-action list-group-item-info">
                     Резюме +</a>
-                <a href="#" id="edit_photo"
+                <a href="{% url 'client_edit_photo' %}" id="edit_photo"
                    class="list-group-item list-group-item-action list-group-item-danger">
                     Фото +</a>
             </div>
