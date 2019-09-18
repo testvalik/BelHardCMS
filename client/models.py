@@ -130,11 +130,18 @@ class Client(models.Model):
     # state
     state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True)
 
+    def delete(self, *args, **kwargs):
+        self.img.delete()
+        # add client_CV.pdf
+        # add certificate.pdf
+        super().delete(*args, **kwargs)
+
 
 class Telephone(models.Model):
     telephone_number = models.CharField(max_length=20)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
+        pass
         # do something
-        super().save(*args, **kwargs)
+        # super().save(*args, **kwargs)   # TODO uncomment after 'UserLogin' module done!!!
