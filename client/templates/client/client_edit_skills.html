@@ -7,12 +7,13 @@
 
 {% block content %}
 
-    <h3>skills</h3>
+    <h3>Write your skills</h3>
 
     <div class="row">
         <div class="col-md-4">
 
-            <form action="{% url 'client_save_edit_skills' %}" method="post">
+            {# <form action="{% url 'client_save_edit_skills' %}" method="post"> #}
+            <form method="post">
                 {% csrf_token %}
 
                 <div class="list-group">
@@ -20,7 +21,6 @@
                         <input type="text" class="form-control" placeholder="Enter your skill"
                                aria-label="Enter your skill" aria-describedby="button-addon2" id="city"
                                value="" name="skill_1">
-                        {#                value="{{ request.form['skill'] }}#}
                     </div>
 
                     <a href="#" id="skill_plus"
@@ -28,7 +28,8 @@
                         Навык +</a>
                 </div>
 
-                <input type="submit" value="Сохранить данные" formmethod="post" class="btn btn-outline-success mb-3">
+                {# <input type="submit" value="Сохранить данные" formmethod="post" class="btn btn-outline-success mb-3">#}
+                <button type="submit" class="btn btn-outline-success">Сохранить</button>
             </form>
 
         </div>

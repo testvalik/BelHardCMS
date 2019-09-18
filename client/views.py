@@ -1,13 +1,15 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
+from django.shortcuts import render
 from django.template.context_processors import csrf
 
+from .forms import UploadImgForm
 from .models import Client, Sex, Citizenship, FamilyState, Children, City, Telephone, State, Skills
 
 
 def client_main_page(request):
     response = csrf(request)
 
-    response['client_img'] = 'client/img/user_1.png'
+    response['client_img'] = '/media/user_1.png'
 
     return render(request, 'client/client_main_page.html', response)
 
@@ -15,7 +17,7 @@ def client_main_page(request):
 def client_profile(request):
     response = csrf(request)
 
-    response['client_img'] = 'client/img/user_1.png'
+    response['client_img'] = '/media/user_1.png'
 
     return render(request, 'client/client_profile.html', response)
 
@@ -23,19 +25,15 @@ def client_profile(request):
 def client_edit_main(request):
     response = csrf(request)
 
-    response['client_img'] = 'client/img/user_1.png'
+    response['client_img'] = '/media/user_1.png'
     response['sex'] = Sex.objects.all()
 
-    return render(request, 'client/client_edit_main.html', response)
-
-
-def save_client_edit_main(request):
-    if request.POST:
-        print("save_client_edit_main - request POST")
+    if request.method == 'POST':
+        print('client_edit_main - request.POST')
 
         client = Client(
             name=request.POST['client_first_name'],
-            last_name=request.POST['client_last_name'],
+            lastname=request.POST['client_last_name'],
             patronymic=request.POST['client_middle_name'],
             sex=Sex(sex_word=request.POST['sex']),
             date_born=request.POST['date_born'],
@@ -53,9 +51,10 @@ def save_client_edit_main(request):
             link_linkedin=request.POST['link_linkedin'],
             state=State(state_word=request.POST['state']),
         )
-        # client.save()
+        # client.save()     # TODO uncomment after 'UserLogin' module done!!!
 
-        Telephone(telephone_number=request.POST['phone'])  # .save()
+        Telephone(telephone_number=request.POST['phone'])
+        # .save()   # TODO uncomment after 'UserLogin' module done!!!
 
         print(
             request.POST['client_first_name'],
@@ -79,45 +78,57 @@ def save_client_edit_main(request):
             request.POST['state'],
         )
 
-    return redirect('/client/profile')
+        print('client_edit_main - OK')
+
+        return redirect('/client/profile')
+    else:
+        print('client_edit_main - request.GET')
+
+    return render(request, 'client/client_edit_main.html', response)
 
 
 def client_edit_skills(request):
     response = csrf(request)
 
-    response['client_img'] = 'client/img/user_1.png'
+    response['client_img'] = '/media/user_1.png'
 
-    return render(request, 'client/client_edit_skills.html', response)
-
-
-def save_client_edit_skills(request):
     if request.POST:
-        print("save_client_edit_skills - request POST")
+        print("save_client_edit_skills - request.POST")
 
         skill = Skills(skills=request.POST['skill_1'])
-        # skill.save()
+        # skill.save()      # TODO uncomment after 'UserLogin' module done!!!
 
         print("skill: %s" % request.POST['skill_1'])
 
-    return redirect('/client/edit')
+        return redirect('/client/edit')
+    else:
+        print('client_edit_skills - request.GET')
+
+    return render(request, 'client/client_edit_skills.html', response)
 
 
 def client_edit_photo(request):
     response = csrf(request)
 
-    response['client_img'] = 'client/img/user_1.png'
+    response['client_img'] = '/media/user_1.png'
 
-    return render(request, 'client/client_edit_photo.html', response)
+    if request.method == 'POST':
+        form = UploadImgForm(request.POST, request.FILES)
+        response['form'] = form
 
+        # uploaded_file = request.FILES['photo']
+        # fs = FileSystemStorage()
+        # file = fs.save(uploaded_file.name, uploaded_file)
+        # file_url = fs.url(file)
+        # response['file_url'] = file_url
 
-def save_client_edit_photo(request):
-    if request.POST:
-        print("save_client_edit_photo - request POST")
+        if form.is_valid():
+            # form.save()       # TODO uncomment after 'UserLogin' module done!!!
+            print('client save photo - OK')
+            return redirect(to='/client/edit')
+    else:
+        response['form'] = UploadImgForm()
 
-        # TODO: нужен полный путь к картинке для загрузки и сохранения в БД
-        photo = Client(img=request.POST['photo'], )
-        # photo.save()
-
-        print("photo: %s" % request.POST['photo'])
-
-    return redirect('/client/edit')
+    return render(request=request,
+                  template_name='client/client_edit_photo.html',
+                  context=response)

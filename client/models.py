@@ -95,7 +95,7 @@ class State(models.Model):
 class Client(models.Model):
     user_client = models.OneToOneField(UserModel, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, verbose_name='Имя')
-    last_name = models.CharField(max_length=100, verbose_name='Фамилия')
+    lastname = models.CharField(max_length=100, verbose_name='Фамилия')
     patronymic = models.CharField(max_length=100, verbose_name='Отчество')
 
     sex = models.ForeignKey(Sex, on_delete=models.SET_NULL, null=True, blank=True)

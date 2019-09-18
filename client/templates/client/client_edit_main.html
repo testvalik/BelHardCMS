@@ -8,11 +8,10 @@
 {% block content %}
 
     <div class="row">
-
         <div class="col-md-8">
 
-            <!-- # TODO: есть ли лучший метод обработки POST ? -->
-            <form action="{% url 'client_save_edit_main' %}" method="post">
+            {# <form method="post" action="{% url 'client_save_edit_main' %}"> #}
+            <form method="post">
                 {% csrf_token %}
 
                 <h3>Общая информация</h3>
@@ -61,9 +60,6 @@
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="id_date_born">Дата рождения:</label>
                     </div>
-                    {#                    <select class="custom-select" id="id_date_born" name="date_born">#}
-                    {#                        <option selected>Choose...</option>#}
-                    {#                    </select>#}
                     <input type="date" name="date_born" aria-label="DateBorn" id="id_date_born">
                 </div>
                 <div class="input-group mb-3">
@@ -84,9 +80,12 @@
                     </div>
                     <select class="custom-select" id="id_family_state" name="family_state">
                         <option selected>Choose...</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                        <!-- TODO: if sex == M -->
+                        <option value="1">холост</option>
+                        <option value="2">женат</option>
+                        <!-- TODO: if sex == F -->
+                        <option value="3">не замужем</option>
+                        <option value="4">замужем</option>
                     </select>
                 </div>
                 <div class="input-group mb-3">
@@ -95,7 +94,7 @@
                     </div>
                     <select class="custom-select" id="id_children" name="children">
                         <option selected>Choose...</option>
-                        <option value="yes">Усть</option>
+                        <option value="yes">Есть</option>
                         <option value="no">Нету</option>
                     </select>
                 </div>
@@ -191,13 +190,17 @@
                     </div>
                     <select class="custom-select" id="id_state" name="state">
                         <option selected>Choose...</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
+                        <option value="1">В поиске</option>
+                        <option value="2">На собеседовании</option>
+                        <option value="3">Трудоустроен</option>
+                        <option value="4">Не ищет работу</option>
+                        <option value="5">Не сотрудничает</option>
+                        <option value="6">Заблокирован</option>
                     </select>
                 </div>
 
-                <input type="submit" value="Сохранить" formmethod="post" class="btn btn-outline-success">
+                {# <input type="submit" value="Сохранить" formmethod="post" class="btn btn-outline-success"> #}
+                <button type="submit" class="btn btn-outline-success">Сохранить</button>
 
             </form>
         </div>
