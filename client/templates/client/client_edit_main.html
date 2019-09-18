@@ -7,6 +7,8 @@
 
 {% block content %}
 
+    <script type="text/javascript" src="{% static 'client/js/client_main.js' %}"></script>
+
     <div class="row">
         <div class="col-md-8">
 
@@ -148,11 +150,19 @@
                 <h3>Контакты</h3>
 
                 <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Телефон:</span>
+                    <div class="form-group" id="phone_0">
+                        <label for="int_phone">Телефон:</label>
+                        <!-- pattern="[0-9]{3}[0-9]{3}[0-9]{3}" -->
+                        <input type="tel" class="form-control" name="phone" aria-describedby="small_phone"
+                               id="int_phone">
+                        <small class="form-text text-muted" id="small_phone">
+                            +375291234567 (код страны + код оператора + номер)
+                        </small>
                     </div>
-                    <!-- pattern="[0-9]{3}[0-9]{3}[0-9]{3}" -->
-                    <input type="tel" aria-label="Phone" class="form-control" name="phone">
+                    <button class="btn btn-outline-primary mb-3" type="button"
+                            onclick="add_1more_element('input', 'add 1more phone', 'phone', 'phone_0')">
+                        +
+                    </button>
                 </div>
 
                 <div class="input-group mb-3">

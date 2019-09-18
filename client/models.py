@@ -142,6 +142,6 @@ class Telephone(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
-        pass
+        print("phone to save: %s" % self.telephone_number)
         # do something
         # super().save(*args, **kwargs)   # TODO uncomment after 'UserLogin' module done!!!

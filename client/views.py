@@ -39,13 +39,13 @@ def client_edit_main(request):
             name=request.POST['client_first_name'],
             lastname=request.POST['client_last_name'],
             patronymic=request.POST['client_middle_name'],
-            sex=Sex(sex_word=request.POST['sex']),
+            sex=Sex(sex_word=request.POST['sex']),  # .save()
             date_born=request.POST['date_born'],
-            citizenship=Citizenship(country_word=request.POST['citizenship']),
-            family_state=FamilyState(state_word=request.POST['family_state']),
-            children=Children(children_word=request.POST['children']),
-            country=Citizenship(country_word=request.POST['country']),
-            city=City(city_word=request.POST['city']),
+            citizenship=Citizenship(country_word=request.POST['citizenship']),  # .save()
+            family_state=FamilyState(state_word=request.POST['family_state']),  # .save()
+            children=Children(children_word=request.POST['children']),  # .save()
+            country=Citizenship(country_word=request.POST['country']),  # .save()
+            city=City(city_word=request.POST['city']),  # .save()
             street=request.POST['street'],
             house=request.POST['house'],
             flat=request.POST['flat'],
@@ -53,11 +53,13 @@ def client_edit_main(request):
             skype=request.POST['skype_id'],
             email=request.POST['email'],
             link_linkedin=request.POST['link_linkedin'],
-            state=State(state_word=request.POST['state']),
+            state=State(state_word=request.POST['state']),  # .save()
         )
         # client.save()  # TODO uncomment after 'UserLogin' module done!!!
 
-        Telephone(telephone_number=request.POST['phone']).save()
+        tel = request.POST.getlist('phone')
+        for t in tel:
+            Telephone(telephone_number=t).save()
 
         print(
             request.POST['client_first_name'],
@@ -73,7 +75,7 @@ def client_edit_main(request):
             request.POST['street'],
             request.POST['house'],
             request.POST['flat'],
-            request.POST['phone'],
+            request.POST.getlist('phone'),
             request.POST['telegram_link'],
             request.POST['skype_id'],
             request.POST['email'],
@@ -104,12 +106,18 @@ def client_edit_skills(request):
         print("skill: %s" % skills_arr)
 
         for s in skills_arr:
-            skill = Skills(skills=s)
+            skill = Client(skills=Skills(skills=s))  # Skill().save())
             # skill.save()  # TODO uncomment after 'UserLogin' module done!!!
+
+        # form = AddSkillForm(request.POST)
+        # response['form'] = form
+        # if form.is_valid():
+        #     form.save()
 
         return redirect(to='/client/edit')
     else:
         print('client_edit_skills - request.GET')
+        # response['form'] = AddSkillForm()
 
     return render(request=request,
                   template_name='client/client_edit_skills.html',
@@ -126,12 +134,6 @@ def client_edit_photo(request):
 
         form = UploadImgForm(request.POST, request.FILES)
         response['form'] = form
-
-        # uploaded_file = request.FILES['photo']
-        # fs = FileSystemStorage()
-        # file = fs.save(uploaded_file.name, uploaded_file)
-        # file_url = fs.url(file)
-        # response['file_url'] = file_url
 
         if form.is_valid():
             # form.save()  # TODO uncomment after 'UserLogin' module done!!!

@@ -7,41 +7,33 @@
 
 {% block content %}
 
-    <script type="text/javascript">
-        function add_skill_foo() {
-            var item = document.createElement('input');
-            item.placeholder = 'Enter your skill';
-            item.className = "form-control m-sm-1";
-            item.type = 'text';
-            item.name = 'skill';
-            document.getElementById('skills').appendChild(item);
-        }
-    </script>
+    <script type="text/javascript" src="{% static 'client/js/client_main.js' %}"></script>
 
     <h3>Write your skills</h3>
 
     <div class="row">
-        <div class="col-md-4">
+        <div class="col">
 
-            {# <form action="{% url 'client_save_edit_skills' %}" method="post"> #}
             <form method="post">
                 {% csrf_token %}
-
+                {# <div id="skills"> #}
+                {# { form.as_p }} #}
+                {# </div> #}
+                {# <button onclick="add_1more_element()" type="button" class="btn btn-outline-primary m-sm-1">Навык +</button> #}
                 <div class="list-group">
-                    <div class="input-group" id="skills">
+                    <div id="skills">
                         <input type="text" class="form-control m-sm-1" placeholder="Enter your skill"
                                aria-label="Enter your skill" aria-describedby="button-addon2"
                                name="skill">
                     </div>
 
-                    <button onclick="add_skill_foo()" type="button" class="btn btn-outline-primary m-sm-1">
+                    <button type="button" class="btn btn-outline-primary m-sm-1"
+                            onclick="add_1more_element('input', 'Enter your skill', 'skill', 'skills')">
                         Навык +
                     </button>
                 </div>
 
-                <button type="submit" class="btn btn-outline-success m-sm-1">
-                    Сохранить
-                </button>
+                <button type="submit" class="btn btn-outline-success m-sm-1">Сохранить</button>
             </form>
 
         </div>
