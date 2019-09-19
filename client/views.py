@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from django.template.context_processors import csrf
 
 from .forms import UploadImgForm, AddSkillForm, AddSkillFormSet
-from .models import Client, Sex, Citizenship, FamilyState, Children, City, Telephone, State, Skills
+from .models import Client, Sex, Citizenship, FamilyState, Children, City, Telephone, State, Skills, CV
 
 
 def client_main_page(request):
@@ -156,7 +156,31 @@ def client_edit_photo(request):
     else:
         print('client_edit_photo - request.GET')
         response['form'] = UploadImgForm()
-
+    
     return render(request=request,
                   template_name='client/client_edit_photo.html',
                   context=response)
+
+  
+def client_edit_cv(request):
+    response = csrf(request)
+
+    return render(request, 'client/client_edit_cv.html', response)
+
+def save_client_edit_cv(request):
+    if request.POST:
+        cv = CV(
+            position=request.POST['position'],
+            time_job=request.POST['time_job'],
+            salary=request.POST['salary'],
+            type_salary=request.POST['type_salary'],
+        )
+        #как бы сейв
+        print(
+            request.POST['position'],
+            request.POST['time_job'],
+            request.POST['salary'],
+            request.POST['type_salary']
+        )
+
+    return redirect('edit/cv')
