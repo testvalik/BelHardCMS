@@ -152,15 +152,14 @@
                 <div class="input-group mb-3">
                     <div class="form-group" id="phone_0">
                         <label for="int_phone">Телефон:</label>
-                        <!-- pattern="[0-9]{3}[0-9]{3}[0-9]{3}" -->
                         <input type="tel" class="form-control" name="phone" aria-describedby="small_phone"
-                               id="int_phone">
+                               id="int_phone" value="+" pattern="^[+]{1}[0-9]{1,20}$">
                         <small class="form-text text-muted" id="small_phone">
                             +375291234567 (код страны + код оператора + номер)
                         </small>
                     </div>
                     <button class="btn btn-outline-primary mb-3" type="button"
-                            onclick="add_1more_element('input', 'add 1more phone', 'phone', 'phone_0')">
+                            onclick="add_1more_element('input', 'add 1more phone', 'phone', '+', 'phone_0')">
                         +
                     </button>
                 </div>
@@ -169,7 +168,8 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">Telegram:</span>
                     </div>
-                    <input type="text" aria-label="Telegram" class="form-control" name="telegram_link">
+                    <input type="text" aria-label="Telegram" class="form-control"
+                           name="telegram_link" value="@">
                 </div>
 
                 <div class="input-group mb-3">

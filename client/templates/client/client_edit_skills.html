@@ -13,30 +13,42 @@
 
     <div class="row">
         <div class="col">
-
             <form method="post">
                 {% csrf_token %}
-                {# <div id="skills"> #}
-                {# { form.as_p }} #}
-                {# </div> #}
-                {# <button onclick="add_1more_element()" type="button" class="btn btn-outline-primary m-sm-1">Навык +</button> #}
                 <div class="list-group">
+
                     <div id="skills">
                         <input type="text" class="form-control m-sm-1" placeholder="Enter your skill"
                                aria-label="Enter your skill" aria-describedby="button-addon2"
                                name="skill">
                     </div>
-
                     <button type="button" class="btn btn-outline-primary m-sm-1"
-                            onclick="add_1more_element('input', 'Enter your skill', 'skill', 'skills')">
+                            onclick="add_1more_element('input', 'Enter your skill', 'skill', '','skills')">
                         Навык +
                     </button>
                 </div>
-
                 <button type="submit" class="btn btn-outline-success m-sm-1">Сохранить</button>
             </form>
-
         </div>
     </div>
+
+    <hr>
+    <p>test cod</p>
+    <br>
+    <!-- тестовый код: как по нажатию кнопки добавить ещё 1 {{ form }}-элемент или "include"??? -->
+    <div id="div_add">
+        <!-- v1 -->
+        <form id="form_add">
+            {% include 'client/skills_test_include.html' %}
+        </form>
+        <!-- v2 -->
+        {{ form.as_p }}
+        <!-- button -->
+        <button type="button" class="btn btn-outline-primary m-sm-1"
+                onclick="">
+            add
+        </button>
+    </div>
+    <!-- тестовый код: как по нажатию добавить ещё 1 {{ form }}-элемент ??? -->
 
 {% endblock %}

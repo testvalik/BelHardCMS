@@ -1,15 +1,14 @@
-from django.shortcuts import redirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.template.context_processors import csrf
 
-from .forms import UploadImgForm
+from .forms import UploadImgForm, AddSkillForm
 from .models import Client, Sex, Citizenship, FamilyState, Children, City, Telephone, State, Skills
 
 
 def client_main_page(request):
     response = csrf(request)
 
-    response['client_img'] = '/media/user_1.png'
+    response['client_img'] = '/media/user_1.png'    # test client icon
 
     return render(request=request,
                   template_name='client/client_main_page.html',
@@ -30,15 +29,15 @@ def client_edit_main(request):
     response = csrf(request)
 
     response['client_img'] = '/media/user_1.png'
-    response['sex'] = Sex.objects.all()
+    response['sex'] = Sex.objects.all()  # for a test
 
     if request.method == 'POST':
         print('client_edit_main - request.POST')
 
         client = Client(
-            name=request.POST['client_first_name'],
-            lastname=request.POST['client_last_name'],
-            patronymic=request.POST['client_middle_name'],
+            name=request.POST['client_first_name'].title(),  # вАленТиН -> Валентин
+            lastname=request.POST['client_last_name'].title(),
+            patronymic=request.POST['client_middle_name'].title(),
             sex=Sex(sex_word=request.POST['sex']),  # .save()
             date_born=request.POST['date_born'],
             citizenship=Citizenship(country_word=request.POST['citizenship']),  # .save()
@@ -62,9 +61,9 @@ def client_edit_main(request):
             Telephone(telephone_number=t).save()
 
         print(
-            request.POST['client_first_name'],
-            request.POST['client_last_name'],
-            request.POST['client_middle_name'],
+            request.POST['client_first_name'].title(),
+            request.POST['client_last_name'].title(),
+            request.POST['client_middle_name'].title(),
             request.POST['sex'],
             request.POST['date_born'],
             request.POST['citizenship'],
@@ -109,15 +108,18 @@ def client_edit_skills(request):
             skill = Client(skills=Skills(skills=s))  # Skill().save())
             # skill.save()  # TODO uncomment after 'UserLogin' module done!!!
 
-        # form = AddSkillForm(request.POST)
-        # response['form'] = form
-        # if form.is_valid():
-        #     form.save()
+        # test code ---------------------------
+        form = AddSkillForm(request.POST)
+        response['form'] = form
+        if form.is_valid():
+            print('form.is_valid()')
+            # form.save()
+        # test code ---------------------------
 
         return redirect(to='/client/edit')
     else:
         print('client_edit_skills - request.GET')
-        # response['form'] = AddSkillForm()
+        response['form'] = AddSkillForm()
 
     return render(request=request,
                   template_name='client/client_edit_skills.html',
