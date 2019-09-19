@@ -1,14 +1,14 @@
 from django.shortcuts import redirect, render
 from django.template.context_processors import csrf
 
-from .forms import UploadImgForm, AddSkillForm
+from .forms import UploadImgForm, AddSkillForm, AddSkillFormSet
 from .models import Client, Sex, Citizenship, FamilyState, Children, City, Telephone, State, Skills
 
 
 def client_main_page(request):
     response = csrf(request)
 
-    response['client_img'] = '/media/user_1.png'    # test client icon
+    response['client_img'] = '/media/user_1.png'  # test client icon
 
     return render(request=request,
                   template_name='client/client_main_page.html',
@@ -97,6 +97,7 @@ def client_edit_skills(request):
     response = csrf(request)
 
     response['client_img'] = '/media/user_1.png'
+    myformset = AddSkillFormSet()
 
     if request.method == 'POST':
         print("client_edit_skills - request.POST")
@@ -104,22 +105,33 @@ def client_edit_skills(request):
         skills_arr = request.POST.getlist('skill')
         print("skill: %s" % skills_arr)
 
-        for s in skills_arr:
-            skill = Client(skills=Skills(skills=s))  # Skill().save())
-            # skill.save()  # TODO uncomment after 'UserLogin' module done!!!
+        if any(skills_arr):
+            for s in skills_arr:
+                skill = Client(skills=Skills(skills=s))  # Skill().save())
+                # skill.save()  # TODO uncomment after 'UserLogin' module done!!!
+        else:
+            print('No skills')
 
-        # test code ---------------------------
+        # -------- test code ---------------------------
         form = AddSkillForm(request.POST)
         response['form'] = form
         if form.is_valid():
-            print('form.is_valid()')
+            print('skill form.is_valid()')
             # form.save()
-        # test code ---------------------------
+            # return redirect(to='/client/edit')
+        # -------- test code ---------------------------
+
+        form_set = AddSkillFormSet(request.POST)
+        if form_set.is_valid():
+            print('set is valid - OK')
+            for f in form_set:
+                print('skill from form_set: %s' % f.cleaned_data.get('skills'))
 
         return redirect(to='/client/edit')
     else:
         print('client_edit_skills - request.GET')
-        response['form'] = AddSkillForm()
+        response['myformset'] = myformset
+        response['form'] = AddSkillForm
 
     return render(request=request,
                   template_name='client/client_edit_skills.html',
