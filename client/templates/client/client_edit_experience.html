@@ -1,0 +1,102 @@
+{% extends 'client/client_main_page.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Edit Experience
+{% endblock %}
+
+{% block content %}
+
+    <h3> Experience </h3>
+
+    <h5> Название организации </h5>
+    <div class="row">
+        <div class="col-md-4">
+
+            <form action="{% url 'client_save_edit_experience' %}" method="post">
+                {% csrf_token %}
+
+                <div class="list-group">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder=""
+                               aria-label="" aria-describedby="button-addon2" id="city"
+                               value="" name="experience_1">
+
+                    </div>
+
+                    <a href="{% url 'client_edit_experience' %}" id="experience_plus"
+                       class="list-group-item list-group-item-action list-group-item-primary mb-3">
+                        Добавить</a>
+                </div>
+
+                <input type="submit" value="Сохранить данные" formmethod="post" class="btn btn-outline-success mb-3">
+            </form>
+        </div>
+    </div>
+<div class="row">
+        <div class="col-md-4">
+<h5> Должность </h5>
+            <form action="{% url 'client_save_edit_experience' %}" method="post">
+                {% csrf_token %}
+
+                <div class="list-group">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder=""
+                               aria-label="" aria-describedby="button-addon2" id="city"
+                               value="" name="experience_2">
+
+                    </div>
+
+                    <a href="{% url 'client_edit_experience' %}" id="experience_plus"
+                       class="list-group-item list-group-item-action list-group-item-primary mb-3">
+                        Добавить</a>
+                </div>
+
+                <input type="submit" value="Сохранить данные" formmethod="post" class="btn btn-outline-success mb-3">
+            </form>
+        </div>
+    </div>
+<h5> Обязанности на рабочем месте </h5>
+    <div class="row">
+        <div class="col-md-4">
+
+            <form action="{% url 'client_save_edit_experience' %}" method="post">
+                {% csrf_token %}
+
+                <div class="list-group">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder=""
+                               aria-label="" aria-describedby="button-addon2" id="city"
+                               value="" name="experience_1">
+
+                    </div>
+
+                    <a href="{% url 'client_edit_experience' %}" id="experience_plus"
+                       class="list-group-item list-group-item-action list-group-item-primary mb-3">
+                        Добавить</a>
+                </div>
+
+                <input type="submit" value="Сохранить данные" formmethod="post" class="btn btn-outline-success mb-3">
+            </form>
+        </div>
+    </div>
+    <h5> Период работы </h5>
+<head>
+  <meta charset="utf-8">
+  <title>Календарь</title>
+ </head>
+ <body>
+  <form>
+   <p>Дата начала: <input type="date" name="calendar">
+   <input type="submit" value="Оk"></p>
+  </form>
+<head>
+  <meta charset="utf-8">
+  <title>Календарь</title>
+ </head>
+ <body>
+  <form>
+   <p>Дата окончания: <input type="date" name="calendar">
+   <input type="submit" value="Оk"></p>
+  </form>
+{% endblock %}
