@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import formset_factory    # modelformset_factory
+from django.forms import formset_factory  # modelformset_factory
 
 from .models import Client, Skills, Experience
 
@@ -47,11 +47,11 @@ class AddSkillForm(forms.ModelForm):
             'myformset-TOTAL_FORMS': 2,
         }
 
-        
+
 AddSkillFormSet = formset_factory(AddSkillForm)
 
-        
+
 class AddExperienceForm(forms.ModelForm):
     class Meta:
         model = Experience
-        fields = ('experience',)
+        fields = ('name',)

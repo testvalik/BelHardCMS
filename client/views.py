@@ -7,7 +7,6 @@ from .models import *
 
 def client_main_page(request):
     response = csrf(request)
-
     response['client_img'] = '/media/user_1.png'  # test client icon
 
     return render(request=request,
@@ -17,7 +16,6 @@ def client_main_page(request):
 
 def client_profile(request):
     response = csrf(request)
-
     response['client_img'] = '/media/user_1.png'
 
     return render(request=request,
@@ -27,7 +25,6 @@ def client_profile(request):
 
 def client_edit_main(request):
     response = csrf(request)
-
     response['client_img'] = '/media/user_1.png'
     response['sex'] = Sex.objects.all()  # for a test
 
@@ -96,7 +93,6 @@ def client_edit_main(request):
 
 def client_edit_skills(request):
     response = csrf(request)
-
     response['client_img'] = '/media/user_1.png'
     myformset = AddSkillFormSet()
 
@@ -120,17 +116,16 @@ def client_edit_skills(request):
             print('skill form.is_valid()')
             # form.save()
             # return redirect(to='/client/edit')
-        # -------- test code ---------------------------
 
+        # -------- Работающий test code с FormSet !!! ---------------------------
         form_set = AddSkillFormSet(request.POST)
         if form_set.is_valid():
             print('set is valid - OK')
             for f in form_set:
                 # extract name='skill' from each form and save
                 skill = f.cleaned_data.get('skills')
-                print('skill from form_set: %s' % skill)
                 if skill:
-                    pass
+                    print('skill from form_set: %s' % skill)
                     # Skills(skills=skill).save()  # TODO uncomment after 'UserLogin' module done!!!
 
         return redirect(to='/client/edit')
@@ -146,7 +141,6 @@ def client_edit_skills(request):
 
 def client_edit_photo(request):
     response = csrf(request)
-
     response['client_img'] = '/media/user_1.png'
 
     if request.method == 'POST':
@@ -194,7 +188,6 @@ def client_edit_cv(request):
 
 def client_edit_education(request):
     response = csrf(request)
-
     response['client_img'] = '/media/user_1.png'
 
     if request.method == 'POST':
@@ -228,49 +221,37 @@ def client_edit_education(request):
         return redirect('/client/edit')
     else:
         print('client_edit_education - request.GET')
-        
+
     return render(request, 'client/client_edit_education.html', response)
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
 def client_edit_experience(request):
     response = csrf(request)
+    response['client_img'] = '/media/user_1.png'
 
-    response['client_img'] = 'client/img/user_1.png'
-
-    return render(request, 'client/client_edit_experience.html', response)
-
-def save_client_edit_experience(request):
-    if request.POST:
+    if request.method == 'POST':
         print("save_client_edit_experience - request POST")
 
-        experiences = Experience(experience=request.POST)
+        experiences = Experience(
+            name=request.POST['experience_1'],
+            # TODO Error:
+            #  Direct assignment to the forward side of a many-to-many set is prohibited. Use sphere.set() instead.
+            # sphere=Sphere(sphere_word=request.POST.getlist('experience_2')),
+            position=request.POST['experience_3'],
+            start_date=request.POST['exp_date_start'],
+            end_date=request.POST['exp_date_end'],
+            duties=request.POST['experience_4'],
+        )
+        # experiences.save()  # TODO uncomment after 'UserLogin' module done!!!
+        print(
+            request.POST['experience_1'],
+            request.POST.getlist('experience_2'),
+            request.POST['experience_3'],
+            request.POST['exp_date_start'],
+            request.POST['exp_date_end'],
+            request.POST['experience_4'],
+        )
 
+        return redirect('/client/edit')
 
-        print("experience: %s" % request.POST['experience_1'])
-
-    return redirect('/client/edit')
+    return render(request, 'client/client_edit_experience.html', response)
