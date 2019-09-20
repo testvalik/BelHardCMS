@@ -1,0 +1,37 @@
+{% extends 'client/client_main_page.html' %}
+{% block title %}
+    Edit education
+{% endblock %}
+
+
+
+{% block content %}
+
+    <h3>Образование</h3>
+
+
+        <ul>
+            <li class="media" rows="1" name="education" cols="30"> Учебное заведение  <input type="text"> </li>
+            <li class="media" rows="1" name="education" cols="30"> Предметная область <input type="text"></li>
+            <li class="media" rows="1" name="education" cols="30"> Специальность <input type="text"></li>
+            <li class="media" rows="1" name="education" cols="30"> Квалификация <input type="text"></li>
+            Период обучения
+            <li class="media" rows="1" name="education" cols="30"> Дата начала <input type="date" name="date_start" aria-label="date_start" id="id_date_start"> </li>
+            <li class="media" rows="1" name="education" cols="30"> Дата окончания <input type="date" name="date_end" aria-label="date_end" id="id_date_end"></li>
+            <li class="media" rows="1" name="education" cols="30"> Сертификат <input type=""></li>
+        </ul>
+
+
+
+    </form>
+
+
+
+
+
+
+ <button type="submit", formmethod="post" >Добавить</button>
+<button type="submit">Добавить образование</button>
+
+{% endblock %}
+

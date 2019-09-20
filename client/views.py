@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from django.template.context_processors import csrf
 
 from .forms import UploadImgForm, AddSkillForm, AddSkillFormSet
-from .models import Client, Sex, Citizenship, FamilyState, Children, City, Telephone, State, Skills, CV
+from .models import *
 
 
 def client_main_page(request):
@@ -49,6 +49,7 @@ def client_edit_main(request):
             house=request.POST['house'],
             flat=request.POST['flat'],
             telegram_link=request.POST['telegram_link'],
+            skills_id=request.POST['skills_id'],
             skype=request.POST['skype_id'],
             email=request.POST['email'],
             link_linkedin=request.POST['link_linkedin'],
@@ -76,7 +77,7 @@ def client_edit_main(request):
             request.POST['flat'],
             request.POST.getlist('phone'),
             request.POST['telegram_link'],
-            request.POST['skype_id'],
+            request.POST['skills_id'],
             request.POST['email'],
             request.POST['link_linkedin'],
             request.POST['state'],
@@ -184,3 +185,26 @@ def save_client_edit_cv(request):
         )
 
     return redirect('edit/cv')
+ 
+
+def client_edit_education(request):
+    response = csrf(request)
+
+    response['client_img'] = '/media/user_1.png'
+
+    if request.POST:
+        print("save_client_education - request.POST")
+
+        education = Education(Education=request.POST['education_1'])
+        # education.save()      # TODO uncomment after 'UserLogin' module done!!!
+
+        print("education: %s" % request.POST['education_1'])
+
+        return redirect('/client/edit')
+    else:
+        print('client_edit_education - request.GET')
+
+    return render(request, 'client/client_edit_education.html', response)
+
+
+  

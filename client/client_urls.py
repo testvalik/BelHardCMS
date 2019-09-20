@@ -8,8 +8,10 @@ urlpatterns = [
     path('edit', views.client_edit_main, name='client_edit'),
     path('edit/skills', views.client_edit_skills, name='client_edit_skills'),
     path('edit/photo', views.client_edit_photo, name='client_edit_photo'),
-  
-  # CV part
+
+    # CV
     path('edit/cv', views.client_edit_cv, name='client_edit_cv'),
     path('save_edit_cv', views.save_client_edit_cv, name='client_save_edit_cv'),
+    # Educ-n
+    path('edit/education', views.client_edit_education, name='client_edit_education'),
 ]
