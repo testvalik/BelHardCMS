@@ -39,7 +39,7 @@ def client_edit_main(request):
             lastname=request.POST['client_last_name'].title(),
             patronymic=request.POST['client_middle_name'].title(),
             sex=Sex(sex_word=request.POST['sex']),  # .save()
-            date_born=request.POST['date_born'],
+            date_born=request.POST['date_born'],  # mast be NOT ''
             citizenship=Citizenship(country_word=request.POST['citizenship']),  # .save()
             family_state=FamilyState(state_word=request.POST['family_state']),  # .save()
             children=Children(children_word=request.POST['children']),  # .save()
@@ -200,10 +200,30 @@ def client_edit_education(request):
     if request.method == 'POST':
         print("save_client_education - request.POST")
 
-        education = Education(Education=request.POST['education_1'])
-        # education.save()      # TODO uncomment after 'UserLogin' module done!!!
+        education = Education(
+            education=request.POST['education'],
+            subject_area=request.POST['subject_area'],
+            specialization=request.POST['specialization'],
+            qualification=request.POST['qualification'],
+            date_start=request.POST['date_start'],  # mast be NOT ''
+            date_end=request.POST['date_end'],  # mast be NOT ''
+            certificate=Certificate(
+                img=request.POST['certificate_img'],
+                link=request.POST['certificate_url']
+            ),  # .save(),
+        )
+        # education.save()  # TODO uncomment after 'UserLogin' module done!!!
 
-        print("education: %s" % request.POST['education_1'])
+        print(
+            request.POST['education'],
+            request.POST['subject_area'],
+            request.POST['specialization'],
+            request.POST['qualification'],
+            request.POST['date_start'],
+            request.POST['date_end'],
+            request.POST['certificate_img'],
+            request.POST['certificate_url'],
+        )
 
         return redirect('/client/edit')
     else:
