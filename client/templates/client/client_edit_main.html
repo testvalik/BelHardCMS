@@ -12,7 +12,6 @@
     <div class="row">
         <div class="col-md-8">
 
-            {# <form method="post" action="{% url 'client_save_edit_main' %}"> #}
             <form method="post">
                 {% csrf_token %}
 
@@ -209,7 +208,7 @@
                     </select>
                 </div>
 
-                {# <input type="submit" value="Сохранить" formmethod="post" class="btn btn-outline-success"> #}
+
                 <button type="submit" class="btn btn-outline-success">Сохранить</button>
 
             </form>

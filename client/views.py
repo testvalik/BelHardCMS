@@ -126,7 +126,12 @@ def client_edit_skills(request):
         if form_set.is_valid():
             print('set is valid - OK')
             for f in form_set:
-                print('skill from form_set: %s' % f.cleaned_data.get('skills'))
+                # extract name='skill' from each form and save
+                skill = f.cleaned_data.get('skills')
+                print('skill from form_set: %s' % skill)
+                if skill:
+                    pass
+                    # Skills(skills=skill).save()  # TODO uncomment after 'UserLogin' module done!!!
 
         return redirect(to='/client/edit')
     else:
@@ -165,19 +170,16 @@ def client_edit_photo(request):
 
 def client_edit_cv(request):
     response = csrf(request)
+    response['client_img'] = '/media/user_1.png'
 
-    return render(request, 'client/client_edit_cv.html', response)
-
-
-def save_client_edit_cv(request):
-    if request.POST:
+    if request.method == 'POST':
         cv = CV(
             position=request.POST['position'],
-            time_job=request.POST['time_job'],
+            time_job=TimeJob(time_job_word=request.POST['time_job']),  # .save(),
             salary=request.POST['salary'],
-            type_salary=request.POST['type_salary'],
+            type_salary=TypeSalary(type_word=request.POST['type_salary']),  # .save(),
         )
-        # как бы сейв
+        # cv.save()  # TODO uncomment after 'UserLogin' module done!!!
         print(
             request.POST['position'],
             request.POST['time_job'],
@@ -185,7 +187,9 @@ def save_client_edit_cv(request):
             request.POST['type_salary']
         )
 
-    return redirect('edit/cv')
+        return redirect(to='/client/edit')
+
+    return render(request, 'client/client_edit_cv.html', response)
 
 
 def client_edit_education(request):
@@ -193,7 +197,7 @@ def client_edit_education(request):
 
     response['client_img'] = '/media/user_1.png'
 
-    if request.POST:
+    if request.method == 'POST':
         print("save_client_education - request.POST")
 
         education = Education(Education=request.POST['education_1'])

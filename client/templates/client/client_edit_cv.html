@@ -8,20 +8,16 @@
 {% block content %}
 
     <div class="row">
-
         <div class="col-md-8">
-
+            <h3>Резюме</h3>
             <form action="{% url 'client_edit_cv' %}" method="post">
                 {% csrf_token %}
-
-                <h3>Резюме</h3>
 
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text">Должность:</span>
                     </div>
-                    <input type="text" aria-label="position" class="form-control" name="position"
-                           value="Желаемая должность" required>
+                    <input type="text" aria-label="position" class="form-control" name="position">
                 </div>
 
                 <div class="input-group mb-3">
@@ -41,8 +37,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">Уровень заработной платы:</span>
                     </div>
-                    <input type="text" aria-label="salary" class="form-control" name="salary"
-                           value="уровень заработной платы" required>
+                    <input type="text" aria-label="salary" class="form-control" name="salary">
                 </div>
 
                 <div class="input-group mb-3">
@@ -57,7 +52,9 @@
                     </select>
                 </div>
 
-                <input type="submit" value="Добавить" formmethod="post" class="btn btn-outline-success">
+                <input type="button" value="Add More" class="btn btn-outline-primary m-sm-1">
+
+                <button type="submit" class="btn btn-outline-success m-sm-1">Сохранить</button>
             </form>
         </div>
     </div>
