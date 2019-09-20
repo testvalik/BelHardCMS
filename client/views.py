@@ -157,16 +157,17 @@ def client_edit_photo(request):
     else:
         print('client_edit_photo - request.GET')
         response['form'] = UploadImgForm()
-    
+
     return render(request=request,
                   template_name='client/client_edit_photo.html',
                   context=response)
 
-  
+
 def client_edit_cv(request):
     response = csrf(request)
 
     return render(request, 'client/client_edit_cv.html', response)
+
 
 def save_client_edit_cv(request):
     if request.POST:
@@ -176,7 +177,7 @@ def save_client_edit_cv(request):
             salary=request.POST['salary'],
             type_salary=request.POST['type_salary'],
         )
-        #как бы сейв
+        # как бы сейв
         print(
             request.POST['position'],
             request.POST['time_job'],
@@ -185,7 +186,7 @@ def save_client_edit_cv(request):
         )
 
     return redirect('edit/cv')
- 
+
 
 def client_edit_education(request):
     response = csrf(request)
@@ -205,6 +206,3 @@ def client_edit_education(request):
         print('client_edit_education - request.GET')
 
     return render(request, 'client/client_edit_education.html', response)
-
-
-  
