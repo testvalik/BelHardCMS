@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import formset_factory  # modelformset_factory
 
-from .models import Client, Skills, Experience
+from .models import Client, Skills, Experience, Education
 
 # special field names for the Formsets
 # https://docs.djangoproject.com/en/2.2/topics/forms/formsets/
@@ -55,3 +55,22 @@ class AddExperienceForm(forms.ModelForm):
     class Meta:
         model = Experience
         fields = ('name',)
+
+
+class AddEducationForm(forms.ModelForm):
+    class Meta:
+        model = Education
+        fields = ('education', 'subject_area', 'specialization',
+                  'qualification',)
+
+        data = {
+            # each form field data with a proper index form
+            'edu_form-0-raw': 'my raw field string',
+
+            # form status, number of forms
+            'edu_form-INITIAL_FORMS': 1,
+            'edu_form-TOTAL_FORMS': 2,
+        }
+
+
+AddEducationFormSet = formset_factory(AddEducationForm)

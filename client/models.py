@@ -36,10 +36,13 @@ class EducationWord(models.CharField):
 
 
 class Education(models.Model):
-    education = models.CharField(max_length=100)  # ?????????????????????
-    subject_area = models.CharField(max_length=100, verbose_name='Предметная область')
-    specialization = models.CharField(max_length=100, verbose_name='Специализация')
-    qualification = models.CharField(max_length=100, verbose_name='Квалификация')
+    education = models.CharField(max_length=100, null=True, blank=True)  # ?????????????????????
+    subject_area = models.CharField(max_length=100, null=True, blank=True,
+                                    verbose_name='Предметная область')
+    specialization = models.CharField(max_length=100, null=True, blank=True,
+                                      verbose_name='Специализация')
+    qualification = models.CharField(max_length=100, null=True, blank=True,
+                                     verbose_name='Квалификация')
     date_start = models.DateField(null=True, blank=True, verbose_name='дата начала')
     date_end = models.DateField(null=True, blank=True, verbose_name='дата окончания')
     certificate = models.ForeignKey(Certificate, null=True, blank=True, on_delete=models.SET_NULL)

@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.template.context_processors import csrf
 
-from .forms import UploadImgForm, AddSkillForm, AddSkillFormSet
+from .forms import UploadImgForm, AddSkillForm, AddSkillFormSet, AddEducationFormSet
 from .models import *
 
 
@@ -254,3 +254,41 @@ def client_edit_experience(request):
         return redirect('/client/edit')
 
     return render(request, 'client/client_edit_experience.html', response)
+
+
+def form_education(request):
+    response = csrf(request)
+    response['client_img'] = '/media/user_1.png'
+
+    if request.method == 'POST':
+        print('-------------------------------------------------')
+        form_set_edu = AddEducationFormSet(request.POST)
+        print('form_set_edu: %s' % form_set_edu)
+        if form_set_edu.is_valid():
+            print('form_set_edu - OK')
+            for f in form_set_edu:
+                print('for f in: %s' % f)
+                print("items: %s" % f.cleaned_data.items())
+
+                edu = f.cleaned_data.get('education')
+                print("edu: %s" % edu)
+
+                s_a = f.cleaned_data.get('subject_area')
+                print("s_a: %s" % s_a)
+
+                sp = f.cleaned_data.get('specialization')
+                print("sp: %s" % sp)
+
+                qu = f.cleaned_data.get('qualification')
+                print("qu: %s" % qu)
+
+                Education(education=edu,
+                          subject_area=s_a,
+                          specialization=sp,
+                          qualification=qu
+                          ).save()
+
+        return redirect(to='/client/edit/form_edu')
+    else:
+        response['edu_form'] = AddEducationFormSet()
+    return render(request, 'client/form_edu.html', response)
