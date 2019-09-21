@@ -154,6 +154,6 @@ class Telephone(models.Model):
         tel = self.telephone_number
         if re.match(pattern=pattern, string=tel):
             print("phone to save: %s" % tel)
-            # super().save(*args, **kwargs)   # TODO uncomment after 'UserLogin' module done!!!
+            super().save(*args, **kwargs)   # TODO uncomment after 'UserLogin' module done!!!
         else:
             print("incorrect phone number")

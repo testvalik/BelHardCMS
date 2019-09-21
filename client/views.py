@@ -32,16 +32,17 @@ def client_edit_main(request):
         print('client_edit_main - request.POST')
 
         client = Client(
+            user_client=request.user,
             name=request.POST['client_first_name'].title(),  # вАленТиН -> Валентин
             lastname=request.POST['client_last_name'].title(),
             patronymic=request.POST['client_middle_name'].title(),
-            sex=Sex(sex_word=request.POST['sex']),  # .save()
+            sex=Sex(sex_word=request.POST['sex']).save(),
             date_born=request.POST['date_born'],  # mast be NOT ''
-            citizenship=Citizenship(country_word=request.POST['citizenship']),  # .save()
-            family_state=FamilyState(state_word=request.POST['family_state']),  # .save()
-            children=Children(children_word=request.POST['children']),  # .save()
-            country=Citizenship(country_word=request.POST['country']),  # .save()
-            city=City(city_word=request.POST['city']),  # .save()
+            citizenship=Citizenship(country_word=request.POST['citizenship']).save(),
+            family_state=FamilyState(state_word=request.POST['family_state']).save(),
+            children=Children(children_word=request.POST['children']).save(),
+            country=Citizenship(country_word=request.POST['country']).save(),
+            city=City(city_word=request.POST['city']).save(),
             street=request.POST['street'],
             house=request.POST['house'],
             flat=request.POST['flat'],
@@ -49,9 +50,9 @@ def client_edit_main(request):
             skype=request.POST['skype_id'],
             email=request.POST['email'],
             link_linkedin=request.POST['link_linkedin'],
-            state=State(state_word=request.POST['state']),  # .save()
+            state=State(state_word=request.POST['state']).save(),
         )
-        # client.save()  # TODO uncomment after 'UserLogin' module done!!!
+        client.save()  # TODO uncomment after 'UserLogin' module done!!!
 
         tel = request.POST.getlist('phone')
         for t in tel:
@@ -93,7 +94,6 @@ def client_edit_main(request):
 def client_edit_skills(request):
     response = csrf(request)
     response['client_img'] = '/media/user_1.png'
-    myformset = AddSkillFormSet()
 
     if request.method == 'POST':
         print("client_edit_skills - request.POST")
@@ -103,14 +103,18 @@ def client_edit_skills(request):
 
         if any(skills_arr):
             for s in skills_arr:
-                skill = Client(skills=Skills(skills=s))  # Skill().save())
-                # skill.save()  # TODO uncomment after 'UserLogin' module done!!!
+                skill = Skills(skills=s)
+                skill.save()  # TODO uncomment after 'UserLogin' module done!!!
+
+                # ОБЪЕДИНЕНИЕ модуля Навыки с конкретным залогиненым клиентом !!!
+                client = Client.objects.get(user_client=request.user)
+                client.skills = skill
+                client.save()
         else:
             print('No skills')
 
         # -------- test code ---------------------------
         form = AddSkillForm(request.POST)
-        response['form'] = form
         if form.is_valid():
             print('skill form.is_valid()')
             # form.save()
@@ -125,12 +129,12 @@ def client_edit_skills(request):
                 skill = f.cleaned_data.get('skills')
                 if skill:
                     print('skill from form_set: %s' % skill)
-                    # Skills(skills=skill).save()  # TODO uncomment after 'UserLogin' module done!!!
+                    Skills(skills=skill).save()  # TODO uncomment after 'UserLogin' module done!!!
 
         return redirect(to='/client/edit')
     else:
         print('client_edit_skills - request.GET')
-        response['myformset'] = myformset
+        response['myformset'] = AddSkillFormSet()
         response['form'] = AddSkillForm
 
     return render(request=request,
@@ -146,10 +150,8 @@ def client_edit_photo(request):
         print('client_edit_photo - request.POST')
 
         form = UploadImgForm(request.POST, request.FILES)
-        response['form'] = form
-
         if form.is_valid():
-            # form.save()  # TODO uncomment after 'UserLogin' module done!!!
+            form.save()  # TODO uncomment after 'UserLogin' module done!!!
             print('client save photo - OK')
             return redirect(to='/client/edit')
     else:
@@ -172,7 +174,7 @@ def client_edit_cv(request):
             salary=request.POST['salary'],
             type_salary=TypeSalary(type_word=request.POST['type_salary']),  # .save(),
         )
-        # cv.save()  # TODO uncomment after 'UserLogin' module done!!!
+        cv.save()  # TODO uncomment after 'UserLogin' module done!!!
         print(
             request.POST['position'],
             request.POST['time_job'],
@@ -202,9 +204,9 @@ def client_edit_education(request):
             certificate=Certificate(
                 img=request.POST['certificate_img'],
                 link=request.POST['certificate_url']
-            ),  # .save(),
+            ).save(),
         )
-        # education.save()  # TODO uncomment after 'UserLogin' module done!!!
+        education.save()  # TODO uncomment after 'UserLogin' module done!!!
 
         print(
             request.POST['education'],
@@ -241,7 +243,7 @@ def client_edit_experience(request):
             end_date=request.POST['exp_date_end'],
             duties=request.POST['experience_4'],
         )
-        # experiences.save()  # TODO uncomment after 'UserLogin' module done!!!
+        experiences.save()  # TODO uncomment after 'UserLogin' module done!!!
         print(
             request.POST['experience_1'],
             request.POST.getlist('experience_2'),
@@ -256,6 +258,7 @@ def client_edit_experience(request):
     return render(request, 'client/client_edit_experience.html', response)
 
 
+# ТЕСТОВАЯ ФОРМА
 def form_education(request):
     response = csrf(request)
     response['client_img'] = '/media/user_1.png'
@@ -272,20 +275,23 @@ def form_education(request):
 
                 edu = f.cleaned_data.get('education')
                 print("edu: %s" % edu)
-
                 s_a = f.cleaned_data.get('subject_area')
                 print("s_a: %s" % s_a)
-
                 sp = f.cleaned_data.get('specialization')
                 print("sp: %s" % sp)
-
                 qu = f.cleaned_data.get('qualification')
                 print("qu: %s" % qu)
+                ds = f.cleaned_data.get('date_start')
+                print("ds: %s" % ds)
+                de = f.cleaned_data.get('date_end')
+                print("ds: %s" % de)
 
                 Education(education=edu,
                           subject_area=s_a,
                           specialization=sp,
-                          qualification=qu
+                          qualification=qu,
+                          date_start=ds,
+                          date_end=de,
                           ).save()
 
         return redirect(to='/client/edit/form_edu')

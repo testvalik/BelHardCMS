@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import formset_factory  # modelformset_factory
+from django.forms import formset_factory, modelformset_factory
 
 from .models import Client, Skills, Experience, Education
 
@@ -60,8 +60,19 @@ class AddExperienceForm(forms.ModelForm):
 class AddEducationForm(forms.ModelForm):
     class Meta:
         model = Education
+        certificate = forms.ModelChoiceField
         fields = ('education', 'subject_area', 'specialization',
-                  'qualification',)
+                  'qualification', 'date_start', 'date_end', 'certificate')
+
+        widgets = {
+            'education': forms.TextInput(attrs={'class': 'form-control'}),
+            'subject_area': forms.TextInput(attrs={'class': 'form-control'}),
+            'specialization': forms.TextInput(attrs={'class': 'form-control'}),
+            'qualification': forms.TextInput(attrs={'class': 'form-control'}),
+            'date_start': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'date_end': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+
+        }
 
         data = {
             # each form field data with a proper index form
