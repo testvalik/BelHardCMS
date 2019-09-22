@@ -58,6 +58,7 @@ class AddExperienceForm(forms.ModelForm):
 
 
 class AddEducationForm(forms.ModelForm):
+    """ Test Code - Module Form Set """
     class Meta:
         model = Education
         certificate = forms.ModelChoiceField
