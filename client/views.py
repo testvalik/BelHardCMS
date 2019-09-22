@@ -286,7 +286,7 @@ def load_client_img(req):
     """ Show Client Img in the Navigation Bar.
     Img loaded from DB, if user do not have img - load default. """
     try:
-        print("user: %s" % req)
+        print("user: %s, id: %s" % (req, req.id))
         client_img = Client.objects.get(user_client=req).img
         if client_img:
             logging.info("Client.img: %s" % client_img)
