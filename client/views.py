@@ -12,18 +12,14 @@ def client_main_page(request):
     response = csrf(request)
     response['client_img'] = load_client_img(request.user)
 
-    return render(request=request,
-                  template_name='client/client_main_page.html',
-                  context=response)
+    return render(request=request, template_name='client/client_main_page.html', context=response)
 
 
 def client_profile(request):
     response = csrf(request)
     response['client_img'] = load_client_img(request.user)
 
-    return render(request=request,
-                  template_name='client/client_profile.html',
-                  context=response)
+    return render(request=request, template_name='client/client_profile.html', context=response)
 
 
 def client_edit_main(request):
@@ -90,9 +86,7 @@ def client_edit_main(request):
     else:
         print('client_edit_main - request.GET')
 
-    return render(request=request,
-                  template_name='client/client_edit_main.html',
-                  context=response)
+    return render(request=request, template_name='client/client_edit_main.html', context=response)
 
 
 def client_edit_skills(request):
@@ -121,9 +115,7 @@ def client_edit_skills(request):
     else:
         print('client_edit_skills - request.GET')
 
-    return render(request=request,
-                  template_name='client/client_edit_skills.html',
-                  context=response)
+    return render(request=request, template_name='client/client_edit_skills.html', context=response)
 
 
 def client_edit_photo(request):
@@ -149,9 +141,7 @@ def client_edit_photo(request):
         print('client_edit_photo - request.GET')
         response['form'] = UploadImgForm()
 
-    return render(request=request,
-                  template_name='client/client_edit_photo.html',
-                  context=response)
+    return render(request=request, template_name='client/client_edit_photo.html', context=response)
 
 
 def client_edit_cv(request):
@@ -293,6 +283,8 @@ def form_education(request):
 
 
 def load_client_img(req):
+    """ Show Client Img in the Navigation Bar.
+    Img loaded from DB, if user do not have img - load default. """
     try:
         print("user: %s" % req)
         client_img = Client.objects.get(user_client=req).img
