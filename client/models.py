@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-import re
 
 UserModel = get_user_model()
 
@@ -148,12 +147,3 @@ class Client(models.Model):
 class Telephone(models.Model):
     telephone_number = models.CharField(max_length=20, blank=True, null=True)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
-
-    def save(self, *args, **kwargs):
-        pattern = "^[+]{1}[0-9]{1,20}$"
-        tel = self.telephone_number
-        if re.match(pattern=pattern, string=tel):
-            print("phone to save: %s" % tel)
-            super().save(*args, **kwargs)   # TODO uncomment after 'UserLogin' module done!!!
-        else:
-            print("incorrect phone number")

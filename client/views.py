@@ -1,4 +1,5 @@
 import logging
+import re
 
 from django.shortcuts import redirect, render
 from django.template.context_processors import csrf
@@ -29,6 +30,7 @@ def client_edit_main(request):
     if request.method == 'POST':
         print('client_edit_main - request.POST')
 
+        client_first_name = request.POST['client_first_name'].title()
         date = request.POST['date_born']
 
         client = Client(
@@ -52,11 +54,22 @@ def client_edit_main(request):
             link_linkedin=request.POST['link_linkedin'],
             state=State(state_word=request.POST['state']).save(),
         )
-        client.save()
+        # client.save()
+
+        cl = Client.objects.get(user_client=request.user)
+        cl.name = client_first_name
+        cl.save()
 
         tel = request.POST.getlist('phone')
         for t in tel:
-            Telephone(telephone_number=t).save()
+            if re.match("^[+][0-9]{1,20}$", string=t):
+                print("phone to save: %s" % t)
+
+                phone = Telephone(telephone_number=t)
+                phone.client = cl
+                phone.save()
+            else:
+                print("incorrect phone number")
 
         print(
             request.POST['client_first_name'].title(),
@@ -99,8 +112,8 @@ def client_edit_skills(request):
         skills_arr = request.POST.getlist('skill')
         print("skill: %s" % skills_arr)
 
-        if any(skills_arr):
-            for s in skills_arr:
+        for s in skills_arr:
+            if s:
                 skill = Skills(skills=s)
                 skill.save()
 
@@ -108,8 +121,6 @@ def client_edit_skills(request):
                 client = Client.objects.get(user_client=request.user)
                 client.skills = skill
                 client.save()
-        else:
-            print('No skills')
 
         return redirect(to='/client/edit')
     else:
@@ -246,35 +257,36 @@ def form_education(request):
     response['client_img'] = load_client_img(request.user)
 
     if request.method == 'POST':
-        print('-------------------------------------------------')
         form_set_edu = AddEducationFormSet(request.POST)
-        print('form_set_edu: %s' % form_set_edu)
         if form_set_edu.is_valid():
             print('form_set_edu - OK')
             for f in form_set_edu:
-                print('for f in: %s' % f)
-                print("items: %s" % f.cleaned_data.items())
+                f_items = f.cleaned_data.items()
+                print("items: %s" % f_items)
+                if f_items:
+                    edu = f.cleaned_data.get('education')
+                    s_a = f.cleaned_data.get('subject_area')
+                    sp = f.cleaned_data.get('specialization')
+                    qu = f.cleaned_data.get('qualification')
+                    ds = f.cleaned_data.get('date_start')
+                    de = f.cleaned_data.get('date_end')
 
-                edu = f.cleaned_data.get('education')
-                print("edu: %s" % edu)
-                s_a = f.cleaned_data.get('subject_area')
-                print("s_a: %s" % s_a)
-                sp = f.cleaned_data.get('specialization')
-                print("sp: %s" % sp)
-                qu = f.cleaned_data.get('qualification')
-                print("qu: %s" % qu)
-                ds = f.cleaned_data.get('date_start')
-                print("ds: %s" % ds)
-                de = f.cleaned_data.get('date_end')
-                print("ds: %s" % de)
+                    print("edu: %s, s_a: %s, sp: %s, qu: %s, ds: %s, de: %s"
+                          % (edu, s_a, sp, qu, ds, de))
 
-                Education(education=edu,
-                          subject_area=s_a,
-                          specialization=sp,
-                          qualification=qu,
-                          date_start=ds,
-                          date_end=de,
-                          ).save()
+                    education = Education(education=edu,
+                                          subject_area=s_a,
+                                          specialization=sp,
+                                          qualification=qu,
+                                          date_start=ds,
+                                          date_end=de,
+                                          )
+                    education.save()
+                    client = Client.objects.get(user_client=request.user)
+                    client.education = education
+                    client.save()
+        else:
+            print('form_set_edu not valid')
 
         return redirect(to='/client/edit/form_edu')
     else:
