@@ -228,18 +228,24 @@ def client_edit_experience(request):
 
         experiences = Experience(
             name=request.POST['experience_1'],
-            # TODO Error:
-            #  Direct assignment to the forward side of a many-to-many set is prohibited. Use sphere.set() instead.
-            # sphere=Sphere(sphere_word=request.POST.getlist('experience_2')),
             position=request.POST['experience_3'],
             start_date=request.POST['exp_date_start'],  # mast be NOT '' - НУжна проверка на пустое значение!
             end_date=request.POST['exp_date_end'],  # mast be NOT '' - НУжна проверка на пустое значение!
             duties=request.POST['experience_4'],
         )
         experiences.save()
+
+        spheres = request.POST.getlist('experience_2')
+        for s in spheres:
+            if s:
+                """ Save ManyToManyField 'sphere' """
+                sp = Sphere(sphere_word=s)
+                sp.save()
+                experiences.sphere.add(sp)
+
         print(
             request.POST['experience_1'],
-            request.POST.getlist('experience_2'),
+            spheres,
             request.POST['experience_3'],
             request.POST['exp_date_start'],
             request.POST['exp_date_end'],
