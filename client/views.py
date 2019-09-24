@@ -1,5 +1,4 @@
 import logging
-import re
 
 from django.shortcuts import redirect, render
 from django.template.context_processors import csrf
@@ -7,6 +6,7 @@ from django.template.context_processors import csrf
 from BelHardCRM.settings import MEDIA_URL
 from .forms import UploadImgForm, AddEducationFormSet
 from .models import *
+from .utility import *
 
 
 def client_main_page(request):
@@ -25,38 +25,40 @@ def client_profile(request):
 
 def client_edit_main(request):
     response = csrf(request)
+
+    """ Загрузка из БД списков для выбора """
     response['client_img'] = load_client_img(request.user)
+    response['sex'] = Sex.objects.all()
+    response['citizenship'] = Citizenship.objects.all()
+    response['family_state'] = reversed(FamilyState.objects.all())
+    response['children'] = reversed(Children.objects.all())
+    response['country'] = response['citizenship']
+    response['city'] = reversed(City.objects.all())
+    response['state'] = reversed(State.objects.all())
 
     if request.method == 'POST':
         print('client_edit_main - request.POST')
 
         """ Входные данные для сохранения: """
         user = request.user
-        user_name = request.POST['client_first_name'].title()  # вАленТиН -> Валентин
-        last_name = request.POST['client_last_name'].title()
-        patronymic = request.POST['client_middle_name'].title()
-        sex = Sex(sex_word=request.POST['sex'])
-        sex.save()
+        user_name = check_input_str(request.POST['client_first_name'])
+        last_name = check_input_str(request.POST['client_last_name'])
+        patronymic = check_input_str(request.POST['client_middle_name'])
+        sex = Sex.objects.get(sex_word=request.POST['sex'])
         date = request.POST['date_born']
-        citizenship = Citizenship(country_word=request.POST['citizenship'])
-        citizenship.save()
-        family_state = FamilyState(state_word=request.POST['family_state'])
-        family_state.save()
-        children = Children(children_word=request.POST['children'])
-        children.save()
-        country = Citizenship(country_word=request.POST['country'])
-        country.save()
-        city = City(city_word=request.POST['city'])
-        city.save()
-        street = request.POST['street']
-        house = request.POST['house']
-        flat = request.POST['flat']
-        telegram_link = request.POST['telegram_link']
-        skype = request.POST['skype_id']
+        citizenship = Citizenship.objects.get(country_word=request.POST['citizenship'])
+        family_state = FamilyState.objects.get(state_word=request.POST['family_state'])
+        children = Children.objects.get(children_word=request.POST['children'])
+        country = Citizenship.objects.get(country_word=request.POST['country'])
+        city = City.objects.get(city_word=request.POST['city'])
+        street = check_input_str(request.POST['street'])
+        house = check_home_number(request.POST['house'])
+        flat = check_home_number(request.POST['flat'])
+        telegram_link = check_telegram(request.POST['telegram_link'])
+        skype = check_input_str(request.POST['skype_id'])
         email = request.POST['email']
         link_linkedin = request.POST['link_linkedin']
-        state = State(state_word=request.POST['state'])
-        state.save()
+        state = State.objects.get(state_word=request.POST['state'])
 
         print(user_name, last_name, patronymic, sex, date, citizenship, family_state, children, country, city,
               street, house, flat, telegram_link, skype, email, link_linkedin, state)
@@ -68,7 +70,7 @@ def client_edit_main(request):
 
         if user.id not in users_id_list:
             """ Если карточки нету - создаём. """
-            print('User DO NOT exists - creating!')
+            print('User Profile DO NOT exists - creating!')
 
             client = Client(
                 user_client=user,
@@ -95,7 +97,8 @@ def client_edit_main(request):
         else:
             """ Если карточка есть - достаём из БД Объект = Клиент_id.
             Перезаписываем (изменяем) существующие данныев. """
-            print('User exists - Overwriting user data')
+            print('User Profile exists - Overwriting user data')
+
             client = Client.objects.get(user_client=user)  # Объект = Клиент_id
 
             client.name = user_name
@@ -118,17 +121,15 @@ def client_edit_main(request):
             client.state = state
             client.save()
 
+        """ Сохранение телефонных номеров клиента """
         tel = request.POST.getlist('phone')
         print("tel: %s" % tel)
         for t in tel:
-            if re.match("^[+][0-9]{1,20}$", string=t):
-                print("phone to save: %s" % t)
-
+            t = check_phone(t)
+            if t:
                 phone = Telephone(telephone_number=t)
                 phone.client = client
                 phone.save()
-            else:
-                print("incorrect phone number")
 
         print('client_edit_main - OK')
         return redirect(to='/client/profile')

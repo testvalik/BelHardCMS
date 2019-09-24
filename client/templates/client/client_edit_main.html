@@ -36,7 +36,8 @@
                         <span class="input-group-text">Имя:</span>
                     </div>
                     <input type="text" aria-label="First name" class="form-control" name="client_first_name"
-                           value="имя" required>
+                           value="имя" required
+                           pattern="^[a-zA-Zа-яА-Я'-]{1,100}[ ]?[a-zA-Zа-яА-Я'-]{1,100}$">
                 </div>
 
                 <div class="input-group mb-3">
@@ -61,9 +62,9 @@
                     </div>
 
                     <select class="custom-select" id="id_sex" name="sex">
-                        <option selected></option>
-                        <option value="M">М</option>
-                        <option value="F">Ж</option>
+                        {% for s in sex %}
+                            <option selected value="{{ s }}">{{ s }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="input-group mb-3">
@@ -77,10 +78,9 @@
                         <label class="input-group-text" for="id_citizenship">Гражданство:</label>
                     </div>
                     <select class="custom-select" id="id_citizenship" name="citizenship">
-                        <option selected></option>
-                        <option value="BY">РБ</option>
-                        <option value="RU">РФ</option>
-                        <option value="UA">Украина</option>
+                        {% for c in citizenship %}
+                            <option selected value="{{ c }}">{{ c }}</option>
+                        {% endfor %}
                     </select>
                 </div>
 
@@ -89,13 +89,9 @@
                         <label class="input-group-text" for="id_family_state">Семейное положение:</label>
                     </div>
                     <select class="custom-select" id="id_family_state" name="family_state">
-                        <option selected></option>
-                        <!-- TODO: if sex == M -->
-                        <option value="1">холост</option>
-                        <option value="2">женат</option>
-                        <!-- TODO: if sex == F -->
-                        <option value="3">не замужем</option>
-                        <option value="4">замужем</option>
+                        {% for fs in family_state %}
+                            <option selected value="{{ fs }}">{{ fs }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="input-group mb-3">
@@ -103,9 +99,9 @@
                         <label class="input-group-text" for="id_children">Дети:</label>
                     </div>
                     <select class="custom-select" id="id_children" name="children">
-                        <option selected></option>
-                        <option value="yes">Есть</option>
-                        <option value="no">Нету</option>
+                        {% for ch in children %}
+                            <option selected value="{{ ch }}">{{ ch }}</option>
+                        {% endfor %}
                     </select>
                 </div>
 
@@ -116,10 +112,9 @@
                         <label class="input-group-text" for="id_country">Страна:</label>
                     </div>
                     <select class="custom-select" id="id_country" name="country">
-                        <option selected></option>
-                        <option value="BY">РБ</option>
-                        <option value="RU">РФ</option>
-                        <option value="UA">Украина</option>
+                        {% for ct in country %}
+                            <option selected value="{{ ct }}">{{ ct }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="input-group mb-3">
@@ -127,10 +122,9 @@
                         <label class="input-group-text" for="id_city">Город:</label>
                     </div>
                     <select class="custom-select" id="id_city" name="city">
-                        <option selected></option>
-                        <option value="Minsk">Minsk</option>
-                        <option value="Moscow">Moscow</option>
-                        <option value="Kiev">Kiev</option>
+                        {% for ci in city %}
+                            <option selected value="{{ ci }}">{{ ci }}</option>
+                        {% endfor %}
                     </select>
                 </div>
 
@@ -208,19 +202,17 @@
                         <label class="input-group-text" for="id_state">Статус:</label>
                     </div>
                     <select class="custom-select" id="id_state" name="state">
-                        <option selected></option>
-                        <option value="1">В поиске</option>
-                        <option value="2">На собеседовании</option>
-                        <option value="3">Трудоустроен</option>
-                        <option value="4">Не ищет работу</option>
-                        <option value="5">Не сотрудничает</option>
-                        <option value="6">Заблокирован</option>
+                        {% for st in state %}
+                            <option selected value="{{ st }}">{{ st }}</option>
+                        {% endfor %}
                     </select>
                 </div>
 
                 <button type="submit" class="btn btn-outline-success">Сохранить</button>
 
             </form>
+
+            <a class="btn btn-outline-warning my-2" href="{% url 'client_profile' %}">Назад</a>
         </div>
 
         <div class="col-md-4">
