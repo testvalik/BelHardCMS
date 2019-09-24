@@ -30,71 +30,107 @@ def client_edit_main(request):
     if request.method == 'POST':
         print('client_edit_main - request.POST')
 
-        client_first_name = request.POST['client_first_name'].title()
+        """ Входные данные для сохранения: """
+        user = request.user
+        user_name = request.POST['client_first_name'].title()  # вАленТиН -> Валентин
+        last_name = request.POST['client_last_name'].title()
+        patronymic = request.POST['client_middle_name'].title()
+        sex = Sex(sex_word=request.POST['sex'])
+        sex.save()
         date = request.POST['date_born']
+        citizenship = Citizenship(country_word=request.POST['citizenship'])
+        citizenship.save()
+        family_state = FamilyState(state_word=request.POST['family_state'])
+        family_state.save()
+        children = Children(children_word=request.POST['children'])
+        children.save()
+        country = Citizenship(country_word=request.POST['country'])
+        country.save()
+        city = City(city_word=request.POST['city'])
+        city.save()
+        street = request.POST['street']
+        house = request.POST['house']
+        flat = request.POST['flat']
+        telegram_link = request.POST['telegram_link']
+        skype = request.POST['skype_id']
+        email = request.POST['email']
+        link_linkedin = request.POST['link_linkedin']
+        state = State(state_word=request.POST['state'])
+        state.save()
 
-        client = Client(
-            user_client=request.user,
-            name=request.POST['client_first_name'].title(),  # вАленТиН -> Валентин
-            lastname=request.POST['client_last_name'].title(),
-            patronymic=request.POST['client_middle_name'].title(),
-            sex=Sex(sex_word=request.POST['sex']).save(),
-            date_born=date if date else None,
-            citizenship=Citizenship(country_word=request.POST['citizenship']).save(),
-            family_state=FamilyState(state_word=request.POST['family_state']).save(),
-            children=Children(children_word=request.POST['children']).save(),
-            country=Citizenship(country_word=request.POST['country']).save(),
-            city=City(city_word=request.POST['city']).save(),
-            street=request.POST['street'],
-            house=request.POST['house'],
-            flat=request.POST['flat'],
-            telegram_link=request.POST['telegram_link'],
-            skype=request.POST['skype_id'],
-            email=request.POST['email'],
-            link_linkedin=request.POST['link_linkedin'],
-            state=State(state_word=request.POST['state']).save(),
-        )
-        # client.save()
+        print(user_name, last_name, patronymic, sex, date, citizenship, family_state, children, country, city,
+              street, house, flat, telegram_link, skype, email, link_linkedin, state)
 
-        cl = Client.objects.get(user_client=request.user)
-        cl.name = client_first_name
-        cl.save()
+        """ проверка - сохранена ли карточка клиента в БД. 
+        users_id_list - список карточек c id клиента. """
+        users_id_list = [i['user_client_id'] for i in Client.objects.all().values()]
+        print("users_id_list: %s" % users_id_list)
+
+        if user.id not in users_id_list:
+            """ Если карточки нету - создаём. """
+            print('User DO NOT exists - creating!')
+
+            client = Client(
+                user_client=user,
+                name=user_name,
+                lastname=last_name,
+                patronymic=patronymic,
+                sex=sex,
+                date_born=date if date else None,
+                citizenship=citizenship,
+                family_state=family_state,
+                children=children,
+                country=country,
+                city=city,
+                street=street,
+                house=house,
+                flat=flat,
+                telegram_link=telegram_link,
+                skype=skype,
+                email=email,
+                link_linkedin=link_linkedin,
+                state=state,
+            )
+            client.save()
+        else:
+            """ Если карточка есть - достаём из БД Объект = Клиент_id.
+            Перезаписываем (изменяем) существующие данныев. """
+            print('User exists - Overwriting user data')
+            client = Client.objects.get(user_client=user)  # Объект = Клиент_id
+
+            client.name = user_name
+            client.lastname = last_name
+            client.patronymic = patronymic
+            client.sex = sex
+            client.date_born = date if date else None
+            client.citizenship = citizenship
+            client.family_state = family_state
+            client.children = children
+            client.country = country
+            client.city = city
+            client.street = street
+            client.house = house
+            client.flat = flat
+            client.telegram_link = telegram_link
+            client.skype = skype
+            client.email = email
+            client.link_linkedin = link_linkedin
+            client.state = state
+            client.save()
 
         tel = request.POST.getlist('phone')
+        print("tel: %s" % tel)
         for t in tel:
             if re.match("^[+][0-9]{1,20}$", string=t):
                 print("phone to save: %s" % t)
 
                 phone = Telephone(telephone_number=t)
-                phone.client = cl
+                phone.client = client
                 phone.save()
             else:
                 print("incorrect phone number")
 
-        print(
-            request.POST['client_first_name'].title(),
-            request.POST['client_last_name'].title(),
-            request.POST['client_middle_name'].title(),
-            request.POST['sex'],
-            date,
-            request.POST['citizenship'],
-            request.POST['family_state'],
-            request.POST['children'],
-            request.POST['country'],
-            request.POST['city'],
-            request.POST['street'],
-            request.POST['house'],
-            request.POST['flat'],
-            request.POST.getlist('phone'),
-            request.POST['telegram_link'],
-            request.POST['skype_id'],
-            request.POST['email'],
-            request.POST['link_linkedin'],
-            request.POST['state'],
-        )
-
         print('client_edit_main - OK')
-
         return redirect(to='/client/profile')
     else:
         print('client_edit_main - request.GET')
