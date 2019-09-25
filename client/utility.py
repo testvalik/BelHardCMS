@@ -41,3 +41,45 @@ def check_phone(phone: str) -> str or None:
     else:
         logging.error("Phone Pattern Fail: %s" % phone)
         return None
+
+
+def pars_exp_request(req_post) -> list:
+    """ Опасно для глаз!!! Быдло-код !!!
+    Парсит QueryDict == request.POST в список из нескольких словарей, отсортированных по полям модели Experience. """
+    # print("exp_request.POST: %s" % req_post)
+    from time import perf_counter
+    time_0 = perf_counter()
+
+    arr = []
+    dict_up = {'experience_1': '', 'experience_2': '', 'experience_3': '',
+               'exp_date_start': '', 'exp_date_end': '', 'experience_4': ''}
+    for i in req_post.items():
+        # print("i: %s, %s" % (i[0], i[1]))
+
+        if re.match('experience_1', i[0]):
+            dict_up['experience_1'] = i[1]
+
+        if re.match('experience_2', i[0]):
+            dict_up['experience_2'] = req_post.getlist('experience_2')
+
+        if re.match('experience_3', i[0]):
+            dict_up['experience_3'] = i[1]
+
+        if re.match('exp_date_start', i[0]):
+            dict_up['exp_date_start'] = i[1]
+
+        if re.match('exp_date_end', i[0]):
+            dict_up['exp_date_end'] = i[1]
+
+        if re.match('experience_4', i[0]):
+            dict_up['experience_4'] = i[1]
+
+            # print(dict_up)
+            arr.append(dict_up)
+            dict_up = {'experience_1': '', 'experience_2': '', 'experience_3': '', 'exp_date_start': '',
+                       'exp_date_end': '', 'experience_4': ''}
+            # print('----')
+
+    print('time_it = %s sec' % (perf_counter() - time_0))
+    print("arr: %s" % arr)
+    return arr

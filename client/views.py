@@ -261,41 +261,42 @@ def client_edit_experience(request):
     if request.method == 'POST':
         print("save_client_edit_experience - request POST")
 
-        print("exp. data: %s" % request.POST)
-        organisation = check_input_str(request.POST['experience_1'])
-        position = check_input_str(request.POST['experience_3'])
-        start_date = request.POST['exp_date_start']
-        end_date = request.POST['exp_date_end']
-        duties = request.POST['experience_4']
+        arr = pars_exp_request(request.POST)
+        for dic in arr:
+            organisation = dic['experience_1']
+            position = dic['experience_3']
+            start_date = dic['exp_date_start']
+            end_date = dic['exp_date_end']
+            duties = dic['experience_4']
 
-        if any([organisation, position, start_date, end_date, duties]):
-            experiences = Experience(
-                name=organisation,
-                position=position,
-                start_date=start_date if start_date else None,
-                end_date=end_date if end_date else None,
-                duties=duties if duties else None)
+            if any([organisation, position, start_date, end_date, duties]):
+                experiences = Experience(
+                    name=organisation,
+                    position=position,
+                    start_date=start_date if start_date else None,
+                    end_date=end_date if end_date else None,
+                    duties=duties if duties else None)
 
-            experiences.save()
+                experiences.save()
 
-            spheres = request.POST.getlist('experience_2')
-            for s in spheres:
-                if s:
-                    """ Save ManyToManyField 'sphere' """
-                    sp = Sphere(sphere_word=s)
-                    sp.save()
-                    experiences.sphere.add(sp)
+                spheres = dic['experience_2']
+                for s in spheres:
+                    if s:
+                        """ Save ManyToManyField 'sphere' """
+                        sp = Sphere(sphere_word=s)
+                        sp.save()
+                        experiences.sphere.add(sp)
 
-            print(organisation, spheres, position,
-                  start_date if start_date else None,
-                  end_date if end_date else None,
-                  duties if duties else None)
+                print(organisation, spheres, position,
+                      start_date if start_date else None,
+                      end_date if end_date else None,
+                      duties if duties else None)
 
-            client = Client.objects.get(user_client=request.user)
-            client.organization = experiences
-            client.save()
-        else:
-            print('No Experience data!')
+                client = Client.objects.get(user_client=request.user)
+                client.organization = experiences
+                client.save()
+            else:
+                print('No Experience data!')
 
         return redirect('/client/edit')
     else:
