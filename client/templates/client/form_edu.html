@@ -41,6 +41,26 @@
                 </div>
                 <button type="submit" class="btn btn-outline-success m-sm-1">save</button>
             </form>
+
+
         </div>
     </div>
+
+    <form>
+        <div>
+            {{ edu_form.management_form }}
+            {% for f in edu_form %}
+                <div class="input-group">
+                    ed{{ f.education }}
+                    sa{{ f.subject_area }}
+
+                    sp{{ f.specialization }}
+                    q{{ f.qualification }}
+                    ds{{ f.date_start }}
+                    de{{ f.date_end }}
+                </div>
+            {% endfor %}
+
+        </div>
+    </form>
 {% endblock %}
