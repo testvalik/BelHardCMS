@@ -64,6 +64,9 @@ class Education(models.Model):
     date_end = models.DateField(null=True, blank=True, verbose_name='дата окончания')
     certificate = models.ForeignKey(Certificate, null=True, blank=True, on_delete=models.SET_NULL)
 
+    def __str__(self):
+        return self.education
+
 
 class SkillsWord(models.Model):
     skills_word = models.CharField(max_length=100)  # ?????????????????????
@@ -84,12 +87,15 @@ class Sphere(models.Model):
 
 
 class Experience(models.Model):
-    name = models.CharField(max_length=100)
-    sphere = models.ManyToManyField(Sphere)  # ??? not more 3
-    position = models.CharField(max_length=100)
-    start_date = models.DateField()
-    end_date = models.DateField()
-    duties = models.TextField(max_length=3000)
+    name = models.CharField(max_length=100, null=True, blank=True, verbose_name='organisation')
+    sphere = models.ManyToManyField(Sphere, verbose_name='sphere')  # ??? not more 3
+    position = models.CharField(max_length=100, null=True, blank=True, verbose_name='position')
+    start_date = models.DateField(null=True, blank=True, verbose_name='start_date')
+    end_date = models.DateField(null=True, blank=True, verbose_name='end_date')
+    duties = models.TextField(max_length=3000, null=True, blank=True, verbose_name='duties')
+
+    def __str__(self):
+        return self.name
 
 
 class CvWord(models.Model):
@@ -126,6 +132,9 @@ class CV(models.Model):
     time_job = models.ForeignKey(TimeJob, on_delete=models.SET_NULL, null=True)
     salary = models.CharField(max_length=10, null=True)
     type_salary = models.ForeignKey(TypeSalary, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return self.position
 
 
 class State(models.Model):

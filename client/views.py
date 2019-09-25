@@ -1,5 +1,3 @@
-import logging
-
 from django.shortcuts import redirect, render
 from django.template.context_processors import csrf
 
@@ -151,7 +149,7 @@ def client_edit_skills(request):
 
         for s in skills_arr:
             if s:
-                skill = Skills(skills=s)
+                skill = Skills(skills=check_input_str(s))
                 skill.save()
 
                 """ОБЪЕДИНЕНИЕ модуля Навыки с конкретным залогиненым клиентом!!!"""
@@ -263,33 +261,45 @@ def client_edit_experience(request):
     if request.method == 'POST':
         print("save_client_edit_experience - request POST")
 
-        experiences = Experience(
-            name=request.POST['experience_1'],
-            position=request.POST['experience_3'],
-            start_date=request.POST['exp_date_start'],  # mast be NOT '' - НУжна проверка на пустое значение!
-            end_date=request.POST['exp_date_end'],  # mast be NOT '' - НУжна проверка на пустое значение!
-            duties=request.POST['experience_4'],
-        )
-        experiences.save()
+        organisation = check_input_str(request.POST['experience_1'])
+        position = check_input_str(request.POST['experience_3'])
+        start_date = request.POST['exp_date_start']
+        end_date = request.POST['exp_date_end']
+        duties = request.POST['experience_4']
 
-        spheres = request.POST.getlist('experience_2')
-        for s in spheres:
-            if s:
-                """ Save ManyToManyField 'sphere' """
-                sp = Sphere(sphere_word=s)
-                sp.save()
-                experiences.sphere.add(sp)
+        if any([organisation, position, start_date, end_date, duties]):
+            experiences = Experience(
+                name=organisation,
+                position=position,
+                start_date=start_date if start_date else None,
+                end_date=end_date if end_date else None,
+                duties=duties if duties else None,
+            )
+            experiences.save()
 
-        print(
-            request.POST['experience_1'],
-            spheres,
-            request.POST['experience_3'],
-            request.POST['exp_date_start'],
-            request.POST['exp_date_end'],
-            request.POST['experience_4'],
-        )
+            spheres = request.POST.getlist('experience_2')
+            for s in spheres:
+                if s:
+                    """ Save ManyToManyField 'sphere' """
+                    sp = Sphere(sphere_word=s)
+                    sp.save()
+                    experiences.sphere.add(sp)
+
+            print(organisation, spheres, position,
+                  start_date if start_date else None,
+                  end_date if end_date else None,
+                  duties if duties else None,
+                  )
+
+            client = Client.objects.get(user_client=request.user)
+            client.organization = experiences
+            client.save()
+        else:
+            print('No Experience data!')
 
         return redirect('/client/edit')
+    else:
+        print('save_client_edit_experience - request GET')
 
     return render(request, 'client/client_edit_experience.html', response)
 
