@@ -332,8 +332,7 @@ def form_education(request):
                                           specialization=sp,
                                           qualification=qu,
                                           date_start=ds,
-                                          date_end=de,
-                                          )
+                                          date_end=de)
                     education.save()
                     client = Client.objects.get(user_client=request.user)
                     client.education = education

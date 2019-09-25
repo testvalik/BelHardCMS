@@ -41,26 +41,26 @@
                 </div>
                 <button type="submit" class="btn btn-outline-success m-sm-1">save</button>
             </form>
-
-
         </div>
     </div>
 
-    <form>
+    <form method="post">
+        <h3>Custom Form Testing</h3>
+        {% csrf_token %}
         <div>
             {{ edu_form.management_form }}
             {% for f in edu_form %}
                 <div class="input-group">
-                    ed{{ f.education }}
-                    sa{{ f.subject_area }}
-
-                    sp{{ f.specialization }}
-                    q{{ f.qualification }}
-                    ds{{ f.date_start }}
-                    de{{ f.date_end }}
+                    <p>education: {{ f.education }}</p>
+                    <p>subject_area: {{ f.subject_area }}</p>
+                    <p>specialization: {{ f.specialization }}</p>
+                    <p>qualification: {{ f.qualification }}</p>
+                    <p>date_start: {{ f.date_start }}</p>
+                    <p>date_end: {{ f.date_end }}</p>
                 </div>
             {% endfor %}
-
         </div>
+        <button type="submit" class="btn btn-outline-success m-sm-1">save</button>
     </form>
+
 {% endblock %}
