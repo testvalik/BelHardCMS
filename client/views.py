@@ -261,6 +261,7 @@ def client_edit_experience(request):
     if request.method == 'POST':
         print("save_client_edit_experience - request POST")
 
+        print("exp. data: %s" % request.POST)
         organisation = check_input_str(request.POST['experience_1'])
         position = check_input_str(request.POST['experience_3'])
         start_date = request.POST['exp_date_start']
@@ -273,8 +274,8 @@ def client_edit_experience(request):
                 position=position,
                 start_date=start_date if start_date else None,
                 end_date=end_date if end_date else None,
-                duties=duties if duties else None,
-            )
+                duties=duties if duties else None)
+
             experiences.save()
 
             spheres = request.POST.getlist('experience_2')
@@ -288,8 +289,7 @@ def client_edit_experience(request):
             print(organisation, spheres, position,
                   start_date if start_date else None,
                   end_date if end_date else None,
-                  duties if duties else None,
-                  )
+                  duties if duties else None)
 
             client = Client.objects.get(user_client=request.user)
             client.organization = experiences

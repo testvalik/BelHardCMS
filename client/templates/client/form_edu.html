@@ -27,6 +27,7 @@
                         {{ form.non_field_errors }}
                         {{ form.errors }}
                         <table class='no_error'>
+                            <h4>Образование</h4>
                             {{ form }}
                         </table>
                     {% endfor %}
@@ -34,6 +35,7 @@
                 <input type="button" value="Add More" id="add_more_edu" class="btn btn-outline-primary m-sm-1">
                 <div id="empty_form_edu" style="display:none">
                     <table class='no_error'>
+                        <h4>Образование</h4>
                         {{ edu_form.empty_form }}
                     </table>
                 </div>
