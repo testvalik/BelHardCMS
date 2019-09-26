@@ -4,8 +4,8 @@ import re
 
 def check_input_str(string: str) -> str or None:
     """ pattern: одно-два слова, слова с русскими и английскими буквами,
-    апострафами, двойние слова"""
-    if re.match("^[a-zA-Zа-яА-Я'_]{1,100}[ ]?[-]?[a-zA-Zа-яА-Я']{0,100}$", string):
+    апострафами, двойние слова, слова с цыфрами"""
+    if re.match("^[a-zA-Zа-яА-Я0-9'-_]{1,100}[ ]?[-]?[a-zA-Zа-яА-Я0-9'-_]{0,100}$", string):
         print("string checked: %s" % string)
         return string.title()
     else:

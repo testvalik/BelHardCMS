@@ -40,12 +40,16 @@ class City(models.Model):
 
 
 class Certificate(models.Model):
+    # OneToMany to the Client model
+
     img = models.ImageField(blank=True, null=True, verbose_name='certificate_img')  # ?????????????????????
     link = models.URLField(max_length=100, verbose_name='certificate_link',
                            blank=True, null=True)
 
 
 class EducationWord(models.CharField):
+    # OneToMany to the Client model
+
     education_word = models.CharField(max_length=100)
 
     def __str__(self):
@@ -53,6 +57,8 @@ class EducationWord(models.CharField):
 
 
 class Education(models.Model):
+    # OneToMany to the Client model
+
     education = models.CharField(max_length=100, null=True, blank=True)  # ?????????????????????
     subject_area = models.CharField(max_length=100, null=True, blank=True,
                                     verbose_name='Предметная область')
@@ -76,6 +82,8 @@ class SkillsWord(models.Model):
 
 
 class Skills(models.Model):
+    # OneToMany to the Client model
+
     skills = models.CharField(max_length=100, blank=True, null=True)  # ?????????????????????
 
 
@@ -87,6 +95,8 @@ class Sphere(models.Model):
 
 
 class Experience(models.Model):
+    # OneToMany to the Client model
+
     name = models.CharField(max_length=100, null=True, blank=True, verbose_name='organisation')
     sphere = models.ManyToManyField(Sphere, verbose_name='sphere')  # ??? not more 3
     position = models.CharField(max_length=100, null=True, blank=True, verbose_name='position')
@@ -127,6 +137,8 @@ class TypeSalary(models.Model):
 
 
 class CV(models.Model):
+    # OneToMany to the Client model
+
     position = models.CharField(max_length=100)  # ?????????????????????
     employment = models.ForeignKey(Employment, on_delete=models.SET_NULL, null=True)
     time_job = models.ForeignKey(TimeJob, on_delete=models.SET_NULL, null=True)

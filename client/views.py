@@ -152,7 +152,7 @@ def client_edit_skills(request):
                 skill = Skills(skills=check_input_str(s))
                 skill.save()
 
-                """ОБЪЕДИНЕНИЕ модуля Навыки с конкретным залогиненым клиентом!!!"""
+                """ ОБЪЕДИНЕНИЕ модуля Навыки с конкретным залогиненым клиентом!!! """
                 client = Client.objects.get(user_client=request.user)
                 client.skills = skill
                 client.save()

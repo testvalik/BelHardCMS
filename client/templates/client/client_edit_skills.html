@@ -11,12 +11,15 @@
     <script type="text/javascript">
         $(document).ready(function () {
             var origin = $("#origin_div").clone();
-            var count = 0;
+            var count = 1;
             $("#add_more").on("click", function () {
                 var add = origin.clone();
                 count += 1;
-                console.log(count);
-
+                //console.log(count);
+                var text = add.children('label');
+                //console.log(text);
+                // Изменяет вложенный текст
+                $(text).attr('innerText', text.text('Навык ' + count));
                 add.attr("id", "new_div");
                 add.appendTo("#div_to_add_new");
             });
@@ -35,7 +38,7 @@
 
                     <!-- ИЗМЕНЯТЬ ЭТИ 4 Строчки-->
                     <div class="form-group" id="origin_div">
-                        <label for="id_skill">Навык 1</label>
+                        <label for="id_skill">Навык</label>
                         <input type="text" class="form-control" id="id_skill" name="skill">
                     </div>
 
