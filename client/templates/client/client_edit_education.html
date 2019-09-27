@@ -6,11 +6,43 @@
 
 {% block content %}
 
+    <!-- JS добавления однотипных форм -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var count = 1;
+            var origin = $("#origin_div").clone();
+
+            $("#add_more").on("click", function () {
+                var add = origin.clone();
+                var current_div = add.children('div');
+
+                for (var i = 0; i < 6; i++) {
+                    if (i === 1) {  // 1 select
+                        var element_select = $(current_div).children('select');
+                        console.log(element_select);
+                        var attr_name_s = $(element_select).attr('name');
+                        console.log(attr_name_s);
+                        $(element_select).attr('name', attr_name_s + count);
+                    } else {    // 5 inputs
+                        var element_input = $(current_div[i]).children('input');
+                        console.log(element_input);
+                        var attr_name_i = $(element_input).attr('name');
+                        console.log(attr_name_i);
+                        $(element_input).attr('name', attr_name_i + count);
+                    }
+                }
+                count++;
+                console.log(count);
+                add.appendTo("#div_to_add_new");
+            });
+        });
+    </script>
+
     <div class="row">
         <div class="col-md-6">
             <h3>Образование</h3>
 
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="id_education">Учебное заведение</label>

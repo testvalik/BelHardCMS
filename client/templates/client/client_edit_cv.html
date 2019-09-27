@@ -7,10 +7,42 @@
 
 {% block content %}
 
+    <!-- JS добавления однотипных форм -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var count = 1;
+            var origin = $("#origin_div").clone();
+
+            $("#add_more").on("click", function () {
+                var add = origin.clone();
+                var current_div = add.children('div');
+
+                for (var i = 0; i < 6; i++) {
+                    if (i === 1) {  // 1 select
+                        var element_select = $(current_div).children('select');
+                        console.log(element_select);
+                        var attr_name_s = $(element_select).attr('name');
+                        console.log(attr_name_s);
+                        $(element_select).attr('name', attr_name_s + count);
+                    } else {    // 5 inputs
+                        var element_input = $(current_div[i]).children('input');
+                        console.log(element_input);
+                        var attr_name_i = $(element_input).attr('name');
+                        console.log(attr_name_i);
+                        $(element_input).attr('name', attr_name_i + count);
+                    }
+                }
+                count++;
+                console.log(count);
+                add.appendTo("#div_to_add_new");
+            });
+        });
+    </script>
+
     <div class="row">
         <div class="col-md-8">
             <h3>Резюме</h3>
-            <form action="{% url 'client_edit_cv' %}" method="post">
+            <form method="post">
                 {% csrf_token %}
 
                 <div class="input-group mb-3">
@@ -22,16 +54,27 @@
 
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <label class="input-group-text" for="time_job">Занятость:</label>
+                        <label class="input-group-text" for="id_employment">Занятость:</label>
                     </div>
-                    <select class="custom-select" id="time_job" name="time_job">
-                        <option selected>Choose...</option>
+                    <select class="custom-select" id="id_employment" name="employment">
+                        <option selected></option>
                         <option value="full">Полная</option>
                         <option value="part">Частичная</option>
-                        <option value="remote">Удалённая</option>
+                        <option value="remote">Стажировка</option>
                     </select>
                 </div>
 
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="id_time_job">График работы:</label>
+                    </div>
+                    <select class="custom-select" id="id_time_job" name="time_job">
+                        <option selected></option>
+                        <option value="full">Полный день</option>
+                        <option value="part">Сменный</option>
+                        <option value="remote">Гибкий</option>
+                    </select>
+                </div>
 
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">

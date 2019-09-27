@@ -195,21 +195,32 @@ def client_edit_cv(request):
     response['client_img'] = load_client_img(request.user)
 
     if request.method == 'POST':
+        position = request.POST['position']
+        employment_word = request.POST['employment']
+        employment = Employment(employment=employment_word)
+        employment.save()
+        time_job_word = request.POST['time_job']
+        time_job = TimeJob(time_job_word=time_job_word)
+        time_job.save()
+        salary = request.POST['salary']
+        type_word = request.POST['type_salary']
+        type_salary = TypeSalary(type_word=type_word)
+        type_salary.save()
+
         cv = CV(
-            position=request.POST['position'],
-            time_job=TimeJob(time_job_word=request.POST['time_job']).save(),
-            salary=request.POST['salary'],
-            type_salary=TypeSalary(type_word=request.POST['type_salary']).save(),
+            position=position,
+            employment=employment,
+            time_job=time_job,
+            salary=salary,
+            type_salary=type_salary,
         )
         cv.save()
 
-        print(
-            request.POST['position'],
-            request.POST['time_job'],
-            request.POST['salary'],
-            request.POST['type_salary']
-        )
+        client = Client.objects.get(user_client=request.user)
+        client.cv = cv
+        client.save()
 
+        print(position, employment, time_job, salary, type_salary, )
         return redirect(to='/client/edit')
 
     return render(request, 'client/client_edit_cv.html', response)
@@ -221,31 +232,54 @@ def client_edit_education(request):
 
     if request.method == 'POST':
         print("save_client_education - request.POST")
+        print("edu_request.POST: %s" % request.POST)
 
-        education = Education(
-            education=request.POST['education'],
-            subject_area=request.POST['subject_area'],
-            specialization=request.POST['specialization'],
-            qualification=request.POST['qualification'],
-            date_start=request.POST['date_start'],  # mast be NOT '' - НУжна проверка на пустое значение!
-            date_end=request.POST['date_end'],  # mast be NOT '' - НУжна проверка на пустое значение!
-            certificate=Certificate(
-                img=request.POST['certificate_img'],
-                link=request.POST['certificate_url']
-            ).save(),
-        )
-        education.save()
+        university = request.POST['education']
+        subject_area = request.POST['subject_area']
+        specialization = request.POST['specialization']
+        qualification = request.POST['qualification']
+        date_start = request.POST['date_start']
+        date_end = request.POST['date_end']
 
-        print(
-            request.POST['education'],
-            request.POST['subject_area'],
-            request.POST['specialization'],
-            request.POST['qualification'],
-            request.POST['date_start'],
-            request.POST['date_end'],
-            request.POST['certificate_img'],
-            request.POST['certificate_url'],
-        )
+        img_name = None
+        try:
+            img = request.FILES['certificate_img']
+            img_name = str(img)
+            with open(MEDIA_URL + img_name, 'wb+') as file:
+                for chunk in img.chunks():
+                    file.write(chunk)
+        except:
+            logging.error("Ex. in cer img save")
+
+        link = request.POST['certificate_url']
+
+        if any([university, subject_area, specialization, qualification, date_start, date_end, img_name, link]):
+            certificate = Certificate(
+                img=img_name,
+                link=link,
+            )
+            certificate.save()
+
+            education = Education(
+                education=university,
+                subject_area=subject_area,
+                specialization=specialization,
+                qualification=qualification,
+                date_start=date_start if date_start else None,
+                date_end=date_end if date_end else None,
+                certificate=certificate,
+            )
+            education.save()
+
+            client = Client.objects.get(user_client=request.user)
+            client.education = education
+            client.save()
+        else:
+            print('No education')
+
+        print(university, subject_area, specialization, qualification,
+              date_start if date_start else None,
+              date_end if date_end else None, img_name, link)
 
         return redirect('/client/edit')
     else:
