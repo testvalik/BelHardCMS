@@ -83,3 +83,40 @@ def pars_exp_request(req_post) -> list:
     print('time_it = %s sec' % (perf_counter() - time_0))
     print("arr: %s" % arr)
     return arr
+
+
+def pars_cv_request(req_post: dict) -> list:
+    """ Опасно для глаз!!! Быдло-код !!!
+    Парсит QueryDict == request.POST в список из нескольких словарей, отсортированных по полям модели CV. """
+    # print("exp_request.POST: %s" % req_post)
+    from time import perf_counter
+    time_0 = perf_counter()
+
+    arr = []
+    dict_up = {'position': '', 'employment': '', 'time_job': '', 'salary': '', 'type_salary': ''}
+    for i in req_post.items():
+        print("i: %s, %s" % (i[0], i[1]))
+
+        if re.match('position', i[0]):
+            dict_up['position'] = i[1]
+
+        if re.match('employment', i[0]):
+            dict_up['employment'] = i[1]
+
+        if re.match('time_job', i[0]):
+            dict_up['time_job'] = i[1]
+
+        if re.match('salary', i[0]):
+            dict_up['salary'] = i[1]
+
+        if re.match('type_salary', i[0]):
+            dict_up['type_salary'] = i[1]
+
+            # print(dict_up)
+            arr.append(dict_up)
+            dict_up = {'position': '', 'employment': '', 'time_job': '', 'salary': '', 'type_salary': ''}
+            # print('----')
+
+    print('time_it = %s sec' % (perf_counter() - time_0))
+    # print("arr: %s" % arr)
+    return arr

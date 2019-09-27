@@ -197,33 +197,37 @@ def client_edit_cv(request):
     if request.method == 'POST':
         print("edit_cv.POST: %s" % request.POST)
 
-        position = request.POST['position']
-        employment_word = request.POST['employment']
-        employment = Employment(employment=employment_word)
-        employment.save()
-        time_job_word = request.POST['time_job']
-        time_job = TimeJob(time_job_word=time_job_word)
-        time_job.save()
-        salary = request.POST['salary']
-        type_word = request.POST['type_salary']
-        type_salary = TypeSalary(type_word=type_word)
-        type_salary.save()
+        arr_cv = pars_cv_request(request.POST)
+        for cvs in arr_cv:
+            position = cvs['position']
+            employment_word = cvs['employment']
+            employment = Employment(employment=employment_word)
+            employment.save()
+            time_job_word = cvs['time_job']
+            time_job = TimeJob(time_job_word=time_job_word)
+            time_job.save()
+            salary = cvs['salary']
+            type_word = cvs['type_salary']
+            type_salary = TypeSalary(type_word=type_word)
+            type_salary.save()
 
-        cv = CV(
-            position=position,
-            employment=employment,
-            time_job=time_job,
-            salary=salary,
-            type_salary=type_salary,
-        )
-        cv.save()
+            cv = CV(
+                position=position,
+                employment=employment,
+                time_job=time_job,
+                salary=salary,
+                type_salary=type_salary,
+            )
+            cv.save()
 
-        client = Client.objects.get(user_client=request.user)
-        client.cv = cv
-        client.save()
+            client = Client.objects.get(user_client=request.user)
+            client.cv = cv
+            client.save()
 
-        print(position, employment, time_job, salary, type_salary, )
+            print(position, employment, time_job, salary, type_salary, )
         return redirect(to='/client/edit')
+    else:
+        print('client_edit_cv - request.GET')
 
     return render(request, 'client/client_edit_cv.html', response)
 
