@@ -95,7 +95,7 @@ def pars_cv_request(req_post: dict) -> list:
     arr = []
     dict_up = {'position': '', 'employment': '', 'time_job': '', 'salary': '', 'type_salary': ''}
     for i in req_post.items():
-        print("i: %s, %s" % (i[0], i[1]))
+        # print("i: %s, %s" % (i[0], i[1]))
 
         if re.match('position', i[0]):
             dict_up['position'] = i[1]
@@ -118,5 +118,60 @@ def pars_cv_request(req_post: dict) -> list:
             # print('----')
 
     print('time_it = %s sec' % (perf_counter() - time_0))
-    # print("arr: %s" % arr)
+    print("arr: %s" % arr)
+    return arr
+
+
+def pars_edu_request(req_post, _file) -> list:
+    """ Опасно для глаз!!! Быдло-код !!!
+    Парсит QueryDict == request.POST в список из нескольких словарей, отсортированных по полям модели Education. """
+    # print("exp_request.POST: %s" % req_post)
+    # print("exp_request.FILE: %s" % _file)
+    from time import perf_counter
+    time_0 = perf_counter()
+
+    arr = []
+    dict_up = {'education': '', 'subject_area': '', 'specialization': '', 'qualification': '',
+               'date_start': '', 'date_end': '', 'certificate_img': '', 'certificate_url': ''}
+    count = 0
+    for i in req_post.items():
+        # print("i: %s, %s" % (i[0], i[1]))
+
+        if re.match('education', i[0]):
+            dict_up['education'] = i[1]
+
+        if re.match('subject_area', i[0]):
+            dict_up['subject_area'] = i[1]
+
+        if re.match('specialization', i[0]):
+            dict_up['specialization'] = i[1]
+
+        if re.match('qualification', i[0]):
+            dict_up['qualification'] = i[1]
+
+        if re.match('date_start', i[0]):
+            dict_up['date_start'] = i[1]
+
+        if re.match('date_end', i[0]):
+            dict_up['date_end'] = i[1]
+
+        if re.match('certificate_url', i[0]):
+            dict_up['certificate_url'] = i[1]  # req_post.getlist('certificate_url')
+
+            """ request.FILE == MultiValueDict{'key': [<InMemoryUploadedFile: x.png (image/png)>]} """
+            for f in _file.items():
+                if re.match('certificate_img[0-9]?', f[0]):
+                    if (str(f[0])[-1] == str(count)) or (count == 0):
+                        dict_up['certificate_img'] = f[1]
+                        break
+
+            # print(dict_up)
+            arr.append(dict_up)
+            dict_up = {'education': '', 'subject_area': '', 'specialization': '', 'qualification': '',
+                       'date_start': '', 'date_end': '', 'certificate_img': '', 'certificate_url': ''}
+            count += 1
+            # print('----')
+
+    print('time_it = %s sec' % (perf_counter() - time_0))
+    print("arr: %s" % arr)
     return arr

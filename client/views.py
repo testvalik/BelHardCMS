@@ -195,7 +195,7 @@ def client_edit_cv(request):
     response['client_img'] = load_client_img(request.user)
 
     if request.method == 'POST':
-        print("edit_cv.POST: %s" % request.POST)
+        print('client_edit_cv - request.POST')
 
         arr_cv = pars_cv_request(request.POST)
         for cvs in arr_cv:
@@ -211,20 +211,24 @@ def client_edit_cv(request):
             type_salary = TypeSalary(type_word=type_word)
             type_salary.save()
 
-            cv = CV(
-                position=position,
-                employment=employment,
-                time_job=time_job,
-                salary=salary,
-                type_salary=type_salary,
-            )
-            cv.save()
+            if any([position, employment_word, time_job_word, salary, type_word]):
+                cv = CV(
+                    position=position,
+                    employment=employment,
+                    time_job=time_job,
+                    salary=salary,
+                    type_salary=type_salary,
+                )
+                cv.save()
 
-            client = Client.objects.get(user_client=request.user)
-            client.cv = cv
-            client.save()
+                client = Client.objects.get(user_client=request.user)
+                client.cv = cv
+                client.save()
 
-            print(position, employment, time_job, salary, type_salary, )
+                print("CV Form - OK\n", position, employment, time_job, salary, type_salary)
+            else:
+                print('Cv form is Empty')
+
         return redirect(to='/client/edit')
     else:
         print('client_edit_cv - request.GET')
@@ -238,54 +242,55 @@ def client_edit_education(request):
 
     if request.method == 'POST':
         print("save_client_education - request.POST")
-        print("edu_request.POST: %s" % request.POST)
 
-        university = request.POST['education']
-        subject_area = request.POST['subject_area']
-        specialization = request.POST['specialization']
-        qualification = request.POST['qualification']
-        date_start = request.POST['date_start']
-        date_end = request.POST['date_end']
+        arr_edu = pars_edu_request(request.POST, request.FILES)
+        for edus in arr_edu:
+            university = edus['education']
+            subject_area = edus['subject_area']
+            specialization = edus['specialization']
+            qualification = edus['qualification']
+            date_start = edus['date_start']
+            date_end = edus['date_end']
 
-        img_name = None
-        try:
-            img = request.FILES['certificate_img']
-            img_name = str(img)
-            with open(MEDIA_URL + img_name, 'wb+') as file:
-                for chunk in img.chunks():
-                    file.write(chunk)
-        except:
-            logging.error("Ex. in cer img save")
+            img_name = None
+            try:
+                img = edus['certificate_img']
+                img_name = str(img)
+                with open(MEDIA_URL + img_name, 'wb+') as file:
+                    for chunk in img.chunks():
+                        file.write(chunk)
+            except:
+                logging.error("Ex. in cer_img save")
 
-        link = request.POST['certificate_url']
+            link = edus['certificate_url']
 
-        if any([university, subject_area, specialization, qualification, date_start, date_end, img_name, link]):
-            certificate = Certificate(
-                img=img_name,
-                link=link,
-            )
-            certificate.save()
+            if any([university, subject_area, specialization, qualification,
+                    date_start, date_end, img_name, link]):
+                certificate = Certificate(
+                    img=img_name,
+                    link=link
+                )
+                certificate.save()
 
-            education = Education(
-                education=university,
-                subject_area=subject_area,
-                specialization=specialization,
-                qualification=qualification,
-                date_start=date_start if date_start else None,
-                date_end=date_end if date_end else None,
-                certificate=certificate,
-            )
-            education.save()
+                education = Education(
+                    education=university,
+                    subject_area=subject_area,
+                    specialization=specialization,
+                    qualification=qualification,
+                    date_start=date_start if date_start else None,
+                    date_end=date_end if date_end else None,
+                    certificate=certificate
+                )
+                education.save()
 
-            client = Client.objects.get(user_client=request.user)
-            client.education = education
-            client.save()
-        else:
-            print('No education')
+                client = Client.objects.get(user_client=request.user)
+                client.education = education
+                client.save()
 
-        print(university, subject_area, specialization, qualification,
-              date_start if date_start else None,
-              date_end if date_end else None, img_name, link)
+                print("Education Form - OK\n", university, subject_area, specialization, qualification,
+                      date_start if date_start else None, date_end if date_end else None, img_name, link)
+            else:
+                print('Education Form is Empty')
 
         return redirect('/client/edit')
     else:
@@ -315,8 +320,8 @@ def client_edit_experience(request):
                     position=position,
                     start_date=start_date if start_date else None,
                     end_date=end_date if end_date else None,
-                    duties=duties if duties else None)
-
+                    duties=duties if duties else None
+                )
                 experiences.save()
 
                 spheres = dic['experience_2']
@@ -327,16 +332,14 @@ def client_edit_experience(request):
                         sp.save()
                         experiences.sphere.add(sp)
 
-                print(organisation, spheres, position,
-                      start_date if start_date else None,
-                      end_date if end_date else None,
-                      duties if duties else None)
-
                 client = Client.objects.get(user_client=request.user)
                 client.organization = experiences
                 client.save()
+
+                print("Experience Form - OK\n", organisation, spheres, position, start_date if start_date else None,
+                      end_date if end_date else None, duties if duties else None)
             else:
-                print('No Experience data!')
+                print('Experience Form is Empty')
 
         return redirect('/client/edit')
     else:
