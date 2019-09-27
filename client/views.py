@@ -195,6 +195,8 @@ def client_edit_cv(request):
     response['client_img'] = load_client_img(request.user)
 
     if request.method == 'POST':
+        print("edit_cv.POST: %s" % request.POST)
+
         position = request.POST['position']
         employment_word = request.POST['employment']
         employment = Employment(employment=employment_word)
